@@ -15,7 +15,7 @@ public class EnemyControllerFSM : MonoBehaviour
     public float wanderingRadius = 5;
     Vector3 wanderingArea;
     Vector3 walkPoint;
-    bool walkPointIsSet = false;
+    bool walkPointIsSet;
 
     //Finding and Chasing HERO or Player;
     public float lookRadius = 10f;

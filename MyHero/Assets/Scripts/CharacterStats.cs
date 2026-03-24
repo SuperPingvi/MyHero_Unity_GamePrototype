@@ -8,17 +8,25 @@ public class CharacterStats : MonoBehaviour
     public int currentHealth = 100;
     public int maxHealth = 100;
     public bool takesDamage = true;
-    public bool takesHealing = false;
-    public bool isDead = false;
+    public bool takesHealing;
+    public bool isDead;
     //Attack
     public int damage = 50;
     public float attackSpeed = 1f;
     public float attackDelay = 0.5f;
-
+    //Interaction
     int incomingDamage;
     public int healAmount = 50;
-    float healCD = 0f;
+    //Skills
+    public int currentMana;
+    public int maxMana = 100;
+    int skillCost = 20;
+    float healCD;
 
+    void Start()
+    {
+        currentMana = maxMana;
+    }
     // Update is called once per frame
     private void Update()
     {
@@ -26,7 +34,7 @@ public class CharacterStats : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Weapon" && other.gameObject.layer != this.gameObject.layer)
+        if (other.gameObject.CompareTag("Weapon") && other.gameObject.layer != this.gameObject.layer)
         {
             incomingDamage = other.gameObject.GetComponentInParent<CharacterStats>().damage;
             ReceiveDamage();
@@ -47,10 +55,11 @@ public class CharacterStats : MonoBehaviour
     }
     public void ReceiveHeal(int healAmount)
     {
-        if(healCD <= 0)
+        if(healCD <= 0 && currentHealth != maxHealth && currentMana >= skillCost)
         { 
             currentHealth += healAmount; 
             healCD = 5f;
+            currentMana -= skillCost;
             if (currentHealth > maxHealth) currentHealth = maxHealth;
             HUDController.hud.UpdateHP();
         }

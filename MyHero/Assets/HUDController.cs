@@ -8,6 +8,7 @@ public class HUDController : MonoBehaviour
     public static HUDController hud;
     public Text heroHP;
     public Text myHP;
+    public Text mana;
 
     public CharacterStats heroStats, playerStats;
     // Start is called before the first frame update
@@ -23,5 +24,6 @@ public class HUDController : MonoBehaviour
     {
         heroHP.text = heroStats.currentHealth.ToString();
         myHP.text = playerStats.currentHealth.ToString();
+        mana.text = heroStats.currentMana.ToString();
     }
 }

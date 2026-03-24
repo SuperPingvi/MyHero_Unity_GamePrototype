@@ -9,10 +9,13 @@ public class PlayerMotor : MonoBehaviour
     Transform target;
     
     NavMeshAgent agent;
+    public float speed = 6;
+
     // Start is called before the first frame update
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        agent.speed = speed;
     }
     public void MoveToPoint(Vector3 point)
     {
@@ -48,5 +51,12 @@ public class PlayerMotor : MonoBehaviour
         Vector3 direction = (target.position - transform.position).normalized;
         Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0f, direction.z));
         transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 8f);
+    }
+    public void SynchronizeSpeed()
+    {
+        //if target moves, set speed equals to target's speed, to follow smoothly
+        //get target's speed
+        //set our speed
+        //reset speed upon clearing target
     }
 }
