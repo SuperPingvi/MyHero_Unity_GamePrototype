@@ -18,11 +18,10 @@ public class Hero : Interactable
     public override void Interact()
     {
         base.Interact();
-        Heal();
-    }
-    public void Heal()
-    {
-        Debug.Log("Healed" + transform.name);
-        selfStats.ReceiveHeal(playerStats.healAmount);
+        var ac = playerStats.GetComponent<AbilityController>();
+        if (ac != null && ac.HasAbility())
+        {
+            ac.UseAbility(gameObject);
+        }
     }
 }

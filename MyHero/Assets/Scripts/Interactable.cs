@@ -2,11 +2,14 @@ using UnityEngine;
 
 public class Interactable : MonoBehaviour
 {
-    bool hasInteracted = false;
-    bool isFocus = false;
+    bool hasInteracted;
+    bool isFocus;
     Transform player;
     public float radius = 2f;
     public Transform interactionSpace;
+    
+    AbilityController abilityController;
+    
     void OnDrawGizmosSelected()
     { 
         if(interactionSpace == null)
@@ -14,8 +17,8 @@ public class Interactable : MonoBehaviour
 
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(interactionSpace.position, radius);
-       
     }
+    
     void Update()
     {
         if(isFocus && !hasInteracted)
@@ -29,16 +32,33 @@ public class Interactable : MonoBehaviour
         }
         
     }
+    
+    float GetRadius()
+    {
+        if (abilityController == null && player != null)
+        {
+            abilityController = player.GetComponent<AbilityController>();
+        }
+
+        if (abilityController != null && abilityController.currentAbility != null)
+        {
+            return abilityController.currentAbility.range;
+        }
+        return radius;
+    }
+    
     public virtual void Interact()
     {
         Debug.Log("Interacting with" + transform.name);
     }
+    
     public void OnFocused(Transform playerTransform)
     {
         isFocus = true;
         player = playerTransform;
         hasInteracted = false;
     }
+    
     public void OnDefocused()
     {
         isFocus = false;

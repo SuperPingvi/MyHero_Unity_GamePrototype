@@ -4,34 +4,28 @@ using UnityEngine;
 
 public class CharacterStats : MonoBehaviour
 {
-    //Health
+    [Header("Health")]
     public int currentHealth = 100;
     public int maxHealth = 100;
-    public bool takesDamage = true;
-    public bool takesHealing;
+    public bool canBeDamaged = true;
+    public bool canBeHealed;
     public bool isDead;
-    //Attack
+    
+    [Header("Combat")]
     public int damage = 50;
     public float attackSpeed = 1f;
     public float attackDelay = 0.5f;
-    //Interaction
     int incomingDamage;
-    public int healAmount = 50;
-    //Skills
+    
+    [Header("Mana")]
     public int currentMana;
     public int maxMana = 100;
-    int skillCost = 20;
-    float healCD;
 
     void Start()
     {
         currentMana = maxMana;
     }
-    // Update is called once per frame
-    private void Update()
-    {
-        if (healCD > 0) healCD -= Time.deltaTime;
-    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Weapon") && other.gameObject.layer != this.gameObject.layer)
@@ -53,15 +47,16 @@ public class CharacterStats : MonoBehaviour
             }
         }
     }
-    public void ReceiveHeal(int healAmount)
+    
+    public void ModifyHealth(int amount)
     {
-        if(healCD <= 0 && currentHealth != maxHealth && currentMana >= skillCost)
-        { 
-            currentHealth += healAmount; 
-            healCD = 5f;
-            currentMana -= skillCost;
-            if (currentHealth > maxHealth) currentHealth = maxHealth;
-            HUDController.hud.UpdateHP();
-        }
+        if (amount < 0 && !canBeDamaged)
+            return;
+
+        if (amount > 0 && !canBeHealed)
+            return;
+
+        currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
+        HUDController.hud.UpdateHP();
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(PlayerMotor))]
-public class PlayerControllerRMB : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     public LayerMask clickMaskRMB;
     public LayerMask clickMaskLMB;
@@ -11,7 +11,6 @@ public class PlayerControllerRMB : MonoBehaviour
     public Camera cam;
     PlayerMotor motor;
     [HideInInspector] public bool canMove = true;
-    bool skillActivated;
    
 
     // Start is called before the first frame update
@@ -25,6 +24,13 @@ public class PlayerControllerRMB : MonoBehaviour
     {
         if (Input.GetMouseButton(1) && Time.timeScale != 0f && canMove)
         {
+            var ac = GetComponent<AbilityController>();
+            if (ac != null && ac.HasAbility())
+            {
+                ac.ClearAbility();
+                Debug.Log("Ability cancelled");
+            }
+            
             Ray ray = cam.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, 100, clickMaskRMB))
@@ -36,19 +42,24 @@ public class PlayerControllerRMB : MonoBehaviour
                 }
                 else
                 { 
-                motor.MoveToPoint(hit.point);
-                RemoveFocus();
+                    RemoveFocus();
+                    motor.MoveToPoint(hit.point);
                 }
             }
 
         }
-        if (Input.GetMouseButton(0) && Time.timeScale != 0f && canMove && skillActivated)
+        if (Input.GetMouseButton(0) && Time.timeScale != 0f && canMove)
         {
+            var ac = GetComponent<AbilityController>();
+            if (ac == null || !ac.HasAbility())
+                return;
+            
             Ray ray = cam.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, 100, clickMaskLMB))
             {
                 Interactable interactable = hit.collider.GetComponent<Interactable>();
+                
                 if (interactable != null)
                 {
                     SetFocus(interactable);
@@ -75,11 +86,11 @@ public class PlayerControllerRMB : MonoBehaviour
         focus = null;
         motor.StopFollowingTarget();
         }
-    public void stopMovement()
+    public void StopMovement()
     {
         canMove = false;
     }
-    public void enableMovement()
+    public void EnableMovement()
     {
         canMove = true;
     }

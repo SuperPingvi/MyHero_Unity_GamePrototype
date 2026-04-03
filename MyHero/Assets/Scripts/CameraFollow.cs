@@ -12,7 +12,7 @@ public class CameraFollow : MonoBehaviour
     public float maxZoom = 15f;
     public float minZoom = 5f;
     public float yawSpeed = 100f;
-    private float currentYaw = 0f;
+    private float currentYaw;
     [Range(1f,8f)] public float currentFOV = 6f;
     public float changeFOVSpeed = 1f;
     private void Update()
