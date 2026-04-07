@@ -4,22 +4,19 @@ public class HealAbility : Ability
 {
     public int healAmount = 50;
 
-    protected override void Use(GameObject target)
+    protected override void Apply(AbilityContext context)
     {
-        var stats = target.GetComponent<CharacterStats>();
-        if (stats != null)
-        {
-            stats.ModifyHealth(healAmount);
-            Debug.Log("Healed " + target.name);
-        }
+        Debug.Log($"Apply: target={context.target}, healAmount={healAmount}");
+        if (context.target == null) return;
+        context.target.ModifyHealth(healAmount);
+        Debug.Log($"ModifyHealth called with {healAmount}");
     }
-     
-    protected override bool IsValidTarget(GameObject target)
-    {
-        var stats = target.GetComponentInParent<CharacterStats>();
-        if (stats == null)
-            return false;
 
-        return stats.canBeHealed && !stats.isDead;
+    protected override bool IsValid(AbilityContext context)
+    {
+        if (context.target == null) return false;
+
+        // только союзники
+        return context.target.faction == context.caster.faction;
     }
 }

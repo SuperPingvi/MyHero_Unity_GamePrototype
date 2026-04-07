@@ -23,6 +23,33 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "SelectAbility_W",
+                    "type": "Button",
+                    "id": "f06317b8-8154-4277-acf5-9e5937079d5e",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SelectAbility_E",
+                    "type": "Button",
+                    "id": "aa379321-9c15-4059-9dca-1ac795a9d80b",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SelectAbility_R",
+                    "type": "Button",
+                    "id": "418f50ac-8713-495c-aacf-76c6413416ed",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -56,6 +83,39 @@
                     "processors": "",
                     "groups": "",
                     "action": "CastAbility",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "109b9254-6f0f-4775-8af3-1dcd1baa147a",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectAbility_W",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1b7f556e-2c32-4918-85f3-e97788ff12d7",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectAbility_E",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "06e9a29c-da79-4805-b4a1-a4a5f1bd9efd",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectAbility_R",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

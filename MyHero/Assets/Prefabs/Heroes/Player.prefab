@@ -328,6 +328,9 @@ MonoBehaviour:
   focus: {fileID: 0}
   cam: {fileID: 0}
   canMove: 1
+  abilityController: {fileID: 5616372494207463898}
+  abilities:
+  - {fileID: 3582637620920251487}
 --- !u!114 &1281009068701384829
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -340,6 +343,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f81e95e3daf33864c9fbfb0472b270ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  faction: 0
   currentHealth: 100
   maxHealth: 100
   canBeDamaged: 1
@@ -375,6 +379,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cea1901abbde9ac4da74dc0f2db39726, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HealAbility
+  abilityName: Heal
   cooldown: 3
   range: 5
+  targetType: 0
+  castType: 0
   healAmount: 50

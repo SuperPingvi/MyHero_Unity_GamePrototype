@@ -1775,6 +1775,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1281009068701384826, guid: 4239bfdc76e94ea4ea661112e2a7c46a, type: 3}
   m_PrefabInstance: {fileID: 1281009068170570446}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &542927542 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5616372494207463898, guid: 4239bfdc76e94ea4ea661112e2a7c46a, type: 3}
+  m_PrefabInstance: {fileID: 1281009068170570446}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 542927536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 522c5362fc535d64f8095dec8a387d84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AbilityController
 --- !u!1 &549675142
 GameObject:
   m_ObjectHideFlags: 0
@@ -6257,6 +6268,10 @@ PrefabInstance:
       propertyPath: cam
       value: 
       objectReference: {fileID: 725257246}
+    - target: {fileID: 1281009068701384828, guid: 4239bfdc76e94ea4ea661112e2a7c46a, type: 3}
+      propertyPath: abilityController
+      value: 
+      objectReference: {fileID: 542927542}
     - target: {fileID: 1281009068701384829, guid: 4239bfdc76e94ea4ea661112e2a7c46a, type: 3}
       propertyPath: maxHealth
       value: 100
@@ -6594,7 +6609,7 @@ PrefabInstance:
       objectReference: {fileID: 1235967893}
     - target: {fileID: 5782177474059904308, guid: b48bbd49b7e2f274d95494801c4debc3, type: 3}
       propertyPath: m_VersionIndex
-      value: 7
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 5782177474059904308, guid: b48bbd49b7e2f274d95494801c4debc3, type: 3}
       propertyPath: m_MeshFormatVersion
@@ -6924,6 +6939,10 @@ PrefabInstance:
       propertyPath: 'walkPoints.Array.data[3]'
       value: 
       objectReference: {fileID: 549675142}
+    - target: {fileID: 5782177475380427779, guid: b48bbd49b7e2f274d95494801c4debc3, type: 3}
+      propertyPath: faction
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5782177475380427779, guid: b48bbd49b7e2f274d95494801c4debc3, type: 3}
       propertyPath: maxHealth
       value: 200

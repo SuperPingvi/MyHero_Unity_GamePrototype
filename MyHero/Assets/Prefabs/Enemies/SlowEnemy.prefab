@@ -293,15 +293,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f81e95e3daf33864c9fbfb0472b270ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  faction: 1
   currentHealth: 100
   maxHealth: 100
-  takesDamage: 1
-  takesHealing: 0
+  canBeDamaged: 1
+  canBeHealed: 0
   isDead: 0
   damage: 40
   attackSpeed: 1
   attackDelay: 0.5
-  healAmount: 0
   currentMana: 0
   maxMana: 100
 --- !u!136 &1100447553100203213
@@ -339,6 +339,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbdd4efb0d017514094125e71f61604f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 0}
   radius: 4
   interactionSpace: {fileID: 6956259371732605769}
   selfStats: {fileID: 0}

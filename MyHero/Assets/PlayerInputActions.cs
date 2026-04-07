@@ -109,6 +109,33 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SelectAbility_W"",
+                    ""type"": ""Button"",
+                    ""id"": ""f06317b8-8154-4277-acf5-9e5937079d5e"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SelectAbility_E"",
+                    ""type"": ""Button"",
+                    ""id"": ""aa379321-9c15-4059-9dca-1ac795a9d80b"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SelectAbility_R"",
+                    ""type"": ""Button"",
+                    ""id"": ""418f50ac-8713-495c-aacf-76c6413416ed"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -144,6 +171,39 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""CastAbility"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""109b9254-6f0f-4775-8af3-1dcd1baa147a"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SelectAbility_W"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1b7f556e-2c32-4918-85f3-e97788ff12d7"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SelectAbility_E"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""06e9a29c-da79-4805-b4a1-a4a5f1bd9efd"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SelectAbility_R"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -154,6 +214,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_SelectAbility_Q = m_Player.FindAction("SelectAbility_Q", throwIfNotFound: true);
         m_Player_CastAbility = m_Player.FindAction("CastAbility", throwIfNotFound: true);
+        m_Player_SelectAbility_W = m_Player.FindAction("SelectAbility_W", throwIfNotFound: true);
+        m_Player_SelectAbility_E = m_Player.FindAction("SelectAbility_E", throwIfNotFound: true);
+        m_Player_SelectAbility_R = m_Player.FindAction("SelectAbility_R", throwIfNotFound: true);
     }
 
     ~@PlayerInputActions()
@@ -236,6 +299,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_SelectAbility_Q;
     private readonly InputAction m_Player_CastAbility;
+    private readonly InputAction m_Player_SelectAbility_W;
+    private readonly InputAction m_Player_SelectAbility_E;
+    private readonly InputAction m_Player_SelectAbility_R;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -255,6 +321,18 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/CastAbility".
         /// </summary>
         public InputAction @CastAbility => m_Wrapper.m_Player_CastAbility;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/SelectAbility_W".
+        /// </summary>
+        public InputAction @SelectAbility_W => m_Wrapper.m_Player_SelectAbility_W;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/SelectAbility_E".
+        /// </summary>
+        public InputAction @SelectAbility_E => m_Wrapper.m_Player_SelectAbility_E;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/SelectAbility_R".
+        /// </summary>
+        public InputAction @SelectAbility_R => m_Wrapper.m_Player_SelectAbility_R;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -287,6 +365,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @CastAbility.started += instance.OnCastAbility;
             @CastAbility.performed += instance.OnCastAbility;
             @CastAbility.canceled += instance.OnCastAbility;
+            @SelectAbility_W.started += instance.OnSelectAbility_W;
+            @SelectAbility_W.performed += instance.OnSelectAbility_W;
+            @SelectAbility_W.canceled += instance.OnSelectAbility_W;
+            @SelectAbility_E.started += instance.OnSelectAbility_E;
+            @SelectAbility_E.performed += instance.OnSelectAbility_E;
+            @SelectAbility_E.canceled += instance.OnSelectAbility_E;
+            @SelectAbility_R.started += instance.OnSelectAbility_R;
+            @SelectAbility_R.performed += instance.OnSelectAbility_R;
+            @SelectAbility_R.canceled += instance.OnSelectAbility_R;
         }
 
         /// <summary>
@@ -304,6 +391,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @CastAbility.started -= instance.OnCastAbility;
             @CastAbility.performed -= instance.OnCastAbility;
             @CastAbility.canceled -= instance.OnCastAbility;
+            @SelectAbility_W.started -= instance.OnSelectAbility_W;
+            @SelectAbility_W.performed -= instance.OnSelectAbility_W;
+            @SelectAbility_W.canceled -= instance.OnSelectAbility_W;
+            @SelectAbility_E.started -= instance.OnSelectAbility_E;
+            @SelectAbility_E.performed -= instance.OnSelectAbility_E;
+            @SelectAbility_E.canceled -= instance.OnSelectAbility_E;
+            @SelectAbility_R.started -= instance.OnSelectAbility_R;
+            @SelectAbility_R.performed -= instance.OnSelectAbility_R;
+            @SelectAbility_R.canceled -= instance.OnSelectAbility_R;
         }
 
         /// <summary>
@@ -358,5 +454,26 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnCastAbility(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "SelectAbility_W" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSelectAbility_W(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "SelectAbility_E" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSelectAbility_E(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "SelectAbility_R" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSelectAbility_R(InputAction.CallbackContext context);
     }
 }

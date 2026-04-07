@@ -1,56 +1,56 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class AbilityController : MonoBehaviour
 {
-    private PlayerInputActions input;
-    
     public Ability currentAbility;
-    Ability[] abilities;
 
-    void Awake()
+    private CharacterStats caster;
+
+    private void Awake()
     {
-        input = new PlayerInputActions();
-        abilities = GetComponents<Ability>();
+        caster = GetComponent<CharacterStats>();
     }
 
-    void OnEnable()
+    public void SetAbility(Ability ability)
     {
-        input.Enable();
-
-        input.Player.SelectAbility_Q.performed += OnSelectAbility;
-    }
-
-    void OnDisable()
-    {
-        input.Player.SelectAbility_Q.performed -= OnSelectAbility;
-        
-        input.Disable();
-    }
-
-    void OnSelectAbility(InputAction.CallbackContext ctx)
-    {
-        currentAbility = abilities[0];
-        Debug.Log("Selected ability: " + currentAbility.name);
-    }
-
-    public void UseAbility(GameObject target)
-    {
-        if (currentAbility == null)
-            return;
-        
-        currentAbility.TryUse(target);
-        
-        currentAbility = null;
-    }
-
-    public bool HasAbility()
-    {
-        return currentAbility != null;
+        currentAbility = ability;
     }
 
     public void ClearAbility()
     {
         currentAbility = null;
+    }
+
+    public void UseOnTarget(CharacterStats target)
+    {
+        if (currentAbility == null) return;
+
+        AbilityContext context = new AbilityContext(caster, target);
+
+        bool success = currentAbility.TryUse(context);
+
+        if (success)
+        {
+            ClearAbility();
+        }
+    }
+
+    public void UseOnPoint(Vector3 point)
+    {
+        if (currentAbility == null) return;
+
+        AbilityContext context = new AbilityContext(caster, null, point);
+
+        bool success = currentAbility.TryUse(context);
+
+        if (success)
+        {
+            ClearAbility();
+        }
+    }
+
+    public bool HasAbility()
+    {
+        return currentAbility != null;
     }
 }

@@ -5,23 +5,26 @@ using UnityEngine;
 public class Hero : Interactable
 {
     public CharacterStats selfStats;
-    public CharacterStats playerStats;
     public HeroController heroController;
     // Start is called before the first frame update
     void Start()
     {
         if (heroController == null) heroController = GetComponent<HeroController>();
-        playerStats = PartyManager.instance.player.GetComponent<CharacterStats>();
         if (selfStats == null) selfStats = GetComponent<CharacterStats>();
     }
 
     public override void Interact()
     {
         base.Interact();
-        var ac = playerStats.GetComponent<AbilityController>();
+        var ac = player?.GetComponent<AbilityController>();
+        Debug.Log($"Hero.Interact called. player={player}, ac={ac}, hasAbility={ac?.HasAbility()}");
+
         if (ac != null && ac.HasAbility())
         {
-            ac.UseAbility(gameObject);
+            Debug.Log($"Firing ability on {selfStats}");
+
+            var targetStats = GetComponent<CharacterStats>();
+            ac.UseOnTarget(targetStats);
         }
     }
 }

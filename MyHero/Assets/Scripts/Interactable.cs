@@ -4,7 +4,7 @@ public class Interactable : MonoBehaviour
 {
     bool hasInteracted;
     bool isFocus;
-    Transform player;
+    public Transform player;
     public float radius = 2f;
     public Transform interactionSpace;
     
@@ -24,7 +24,7 @@ public class Interactable : MonoBehaviour
         if(isFocus && !hasInteracted)
         {
             float distance = Vector3.Distance(player.position, interactionSpace.position);
-            if(distance <= radius)
+            if(distance <= GetRadius())
             {
                 Interact();
                 hasInteracted = true;
@@ -39,7 +39,7 @@ public class Interactable : MonoBehaviour
         {
             abilityController = player.GetComponent<AbilityController>();
         }
-
+        
         if (abilityController != null && abilityController.currentAbility != null)
         {
             return abilityController.currentAbility.range;
@@ -57,6 +57,7 @@ public class Interactable : MonoBehaviour
         isFocus = true;
         player = playerTransform;
         hasInteracted = false;
+        abilityController = playerTransform.GetComponent<AbilityController>();
     }
     
     public void OnDefocused()

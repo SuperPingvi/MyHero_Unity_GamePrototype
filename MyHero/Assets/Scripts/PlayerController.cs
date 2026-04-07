@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 [RequireComponent(typeof(PlayerMotor))]
 public class PlayerController : MonoBehaviour
@@ -11,12 +9,44 @@ public class PlayerController : MonoBehaviour
     public Camera cam;
     PlayerMotor motor;
     [HideInInspector] public bool canMove = true;
+    
+    [SerializeField] private AbilityController abilityController;
+    [SerializeField] private Ability[] abilities; // Example
+    
+    private PlayerInputActions inputActions;
    
 
     // Start is called before the first frame update
     void Start()
     {
         motor = GetComponent<PlayerMotor>();
+        
+        abilities = GetComponents<Ability>();
+        Debug.Log($"Found {abilities.Length} abilities on GameObject");
+        inputActions = new PlayerInputActions();
+        inputActions.Enable();
+
+        inputActions.Player.SelectAbility_Q.performed += ctx =>
+        {
+            Debug.Log("Q FIRED");
+            SelectAbility(0);
+        };
+        // inputActions.Player.SelectAbility_W.performed += ctx => SelectAbility(ability_W);
+        // inputActions.Player.SelectAbility_E.performed += ctx => SelectAbility(ability_E);
+        // inputActions.Player.SelectAbility_R.performed += ctx => SelectAbility(ability_R);
+    }
+
+    void SelectAbility(int index)
+    {
+        Debug.Log($"SelectAbility called, index: {index}, abilities count: {abilities?.Length}");
+
+        if (abilities == null || index >= abilities.Length)
+        {
+            Debug.Log("No ability in slot {index}");
+            return;
+        }
+        abilityController.SetAbility(abilities[index]);
+        Debug.Log($"Ability selected: {abilities[index].abilityName}");
     }
 
     // Update is called once per frame
@@ -76,8 +106,8 @@ public class PlayerController : MonoBehaviour
 
             focus = newFocus;
             motor.FollowTarget(newFocus);
+            newFocus.OnFocused(transform);
         }
-        newFocus.OnFocused(transform);
     }
         void RemoveFocus(){
         if (focus != null)

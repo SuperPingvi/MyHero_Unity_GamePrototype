@@ -2479,6 +2479,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f81e95e3daf33864c9fbfb0472b270ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  faction: 0
   currentHealth: 200
   maxHealth: 200
   canBeDamaged: 1
@@ -2501,8 +2502,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 618a8dbc41d7129499906e4f8656e9a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 0}
   radius: 2
   interactionSpace: {fileID: 5782177475380427776}
   selfStats: {fileID: 0}
-  playerStats: {fileID: 0}
   heroController: {fileID: 0}
