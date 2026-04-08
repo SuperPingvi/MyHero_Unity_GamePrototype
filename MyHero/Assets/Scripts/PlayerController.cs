@@ -13,6 +13,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private AbilityController abilityController;
     [SerializeField] private Ability[] abilities; // Example
     
+    private bool previouslyHadAbility = false;
+    
     private PlayerInputActions inputActions;
    
 
@@ -52,6 +54,17 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        bool hasAbility = abilityController.HasAbility();
+
+        if (previouslyHadAbility && !hasAbility)
+        {
+            if (focus != null)
+                motor.SnapFaceTarget();
+            RemoveFocus();
+        }
+        
+        previouslyHadAbility = hasAbility;
+        
         if (Input.GetMouseButton(1) && Time.timeScale != 0f && canMove)
         {
             var ac = GetComponent<AbilityController>();

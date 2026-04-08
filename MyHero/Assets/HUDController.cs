@@ -24,6 +24,6 @@ public class HUDController : MonoBehaviour
     {
         heroHP.text = heroStats.currentHealth.ToString();
         myHP.text = playerStats.currentHealth.ToString();
-        mana.text = heroStats.currentMana.ToString();
+        mana.text = playerStats.currentMana.ToString();
     }
 }

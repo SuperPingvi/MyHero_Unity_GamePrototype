@@ -380,6 +380,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HealAbility
   abilityName: Heal
+  manaCost: 20
   cooldown: 3
   range: 5
   targetType: 0

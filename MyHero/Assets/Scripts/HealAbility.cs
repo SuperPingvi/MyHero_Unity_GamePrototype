@@ -17,6 +17,12 @@ public class HealAbility : Ability
         if (context.target == null) return false;
 
         // только союзники
-        return context.target.faction == context.caster.faction;
+        if (context.target.faction != context.caster.faction)
+            return false;
+
+        if (context.target.currentHealth >= context.target.maxHealth)
+            return false;
+        
+        return true;
     }
 }

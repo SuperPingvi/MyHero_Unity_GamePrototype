@@ -68,4 +68,11 @@ public class CharacterStats : MonoBehaviour
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
         HUDController.hud.UpdateHP();
     }
+
+    public void ModifyMana(int amount)
+    {
+        currentMana += amount;
+        currentMana = Mathf.Clamp(currentMana, 0, maxMana);
+        HUDController.hud.UpdateHP();
+    }
 }

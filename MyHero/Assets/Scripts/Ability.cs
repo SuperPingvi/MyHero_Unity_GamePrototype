@@ -21,6 +21,7 @@ public abstract class Ability : MonoBehaviour
     
     [Header("Base")]
     public string abilityName;
+    public int manaCost;
     public float cooldown = 3f;
     public float range = 3f;
     
@@ -49,8 +50,14 @@ public abstract class Ability : MonoBehaviour
     {
         Debug.Log($"TryUse: CanUse={CanUse()}, IsValid={IsValid(context)}");
         if (!CanUse()) return false;
+
+        if (context.caster.currentMana < manaCost)
+            return false;
+        
         if (!IsValid(context)) return false;
+        
         Apply(context);
+        context.caster.ModifyMana(-manaCost);
         StartCooldown();
         return true;
     }
