@@ -11,7 +11,12 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public bool canMove = true;
     
     [SerializeField] private AbilityController abilityController;
-    [SerializeField] private Ability[] abilities; // Example
+    [SerializeField] private Ability[] abilities;
+    
+    public Ability[] GetAbilities()
+    {
+        return abilities;
+    }
     
     private bool previouslyHadAbility = false;
     

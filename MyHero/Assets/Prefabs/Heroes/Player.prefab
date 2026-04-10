@@ -379,6 +379,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cea1901abbde9ac4da74dc0f2db39726, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HealAbility
+  abilityIcon: {fileID: 21300000, guid: 446e11e9aedd8e54fb62a49833110984, type: 3}
   abilityName: Heal
   manaCost: 20
   cooldown: 3

@@ -3,6 +3,21 @@ using UnityEngine;
 
 public abstract class Ability : MonoBehaviour
 {
+    [Header("Base")]
+    public Sprite abilityIcon;
+    public Sprite iconSelected;
+    public Sprite iconInactive;
+    public string abilityName;
+    public int manaCost;
+    public float cooldown = 3f;
+    public float range = 3f;
+    
+    [Header("Targeting")]
+    public TargetType targetType;
+    public AbilityCastType castType;
+    
+    protected float lastUseTime;
+    
     public enum TargetType
     {
         Ally,
@@ -17,19 +32,7 @@ public abstract class Ability : MonoBehaviour
         Targeted,
         Instant,
         AOE
-    }
-    
-    [Header("Base")]
-    public string abilityName;
-    public int manaCost;
-    public float cooldown = 3f;
-    public float range = 3f;
-    
-    [Header("Targeting")]
-    public TargetType targetType;
-    public AbilityCastType castType;
-    
-    protected float lastUseTime;
+    }    
 
     public bool CanUse()
     {
