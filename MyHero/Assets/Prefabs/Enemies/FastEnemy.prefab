@@ -293,14 +293,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   state: 0
   wanderingRadius: 6
-  lookRadius: 6
+  lookRadius: 12
   player: {fileID: 0}
   hero: {fileID: 0}
-  attackInterval: 2
-  attackRange: 1.5
+  attackInterval: 3
+  attackRange: 1.2
   hitCollider: {fileID: 2363251882246084899}
   enemyAnimator: {fileID: 0}
-  stunDuration: 0
+  stunDuration: 3
 --- !u!114 &6272575457147776504
 MonoBehaviour:
   m_ObjectHideFlags: 0

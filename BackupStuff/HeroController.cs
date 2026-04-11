@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -14,9 +15,9 @@ public class HeroController : MonoBehaviour
 
     //Advancing
     public Vector3 currentWalkPoint;
-    int walkPointsReached;
+    int walkPointsReached = 0;
     int amoutOfWalkPoints;
-    [SerializeField]bool walkPointIsSet;
+    [SerializeField]bool walkPointIsSet = false;
     public GameObject[] walkPoints;
 
     //Enemy chase and attack
@@ -27,7 +28,7 @@ public class HeroController : MonoBehaviour
     public GameObject slashCollider;
     public Animator swordAnimator;
     Transform target;
-    [SerializeField]bool targetIsSet;
+    [SerializeField]bool targetIsSet = false;
     
  
     // Start is called before the first frame update
@@ -86,30 +87,13 @@ public class HeroController : MonoBehaviour
     }
     void ChaseEnemy()
     {
-        Transform closeTarget = GetClosestTargetInAttackRange();
-
-        if (closeTarget != null /* && closeTarget != target */)
-        {
-            target = closeTarget;
-            state = State.Attacking; // State.Chasing; To stop Attacking on the go.
-            return;
-        }
-
-        if (target == null)
-        {
-            state = State.Advancing;
-            return;
-        }
-
         if (walkPointIsSet) walkPointIsSet = false;
-
         float targetDistance = Vector3.Distance(target.position, transform.position);
-
-        if (targetDistance > attackRadius)
+        if(targetDistance > attackRadius)
         { 
             agent.SetDestination(target.position);
         }
-        else
+        else if(targetDistance <= attackRadius)
         { 
             agent.SetDestination(transform.position);
             state = State.Attacking;
@@ -161,27 +145,5 @@ public class HeroController : MonoBehaviour
         Vector3 direction = (target.position - transform.position).normalized;
         Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0f, direction.z));
         transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 8f);
-    }
-    
-    // New "hit what's in your face" check
-    Transform GetClosestTargetInAttackRange()
-    {
-        Collider[] hits = Physics.OverlapSphere(transform.position, attackRadius, enemy);
-
-        float closestDistance = Mathf.Infinity;
-        Transform bestTarget = null;
-
-        foreach (var hit in hits)
-        {
-            float dist = Vector3.Distance(transform.position, hit.transform.position);
-
-            if (dist < closestDistance)
-            {
-                closestDistance = dist;
-                bestTarget = hit.transform;
-            }
-        }
-
-        return bestTarget;
     }
 }
