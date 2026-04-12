@@ -29,6 +29,10 @@ public class CharacterStats : MonoBehaviour
     [Header("Mana")]
     public int currentMana;
     public int maxMana = 100;
+    
+    [Header("Other")]
+    public int shieldAmount;
+    public bool hasShield => shieldAmount > 0;
 
     void Start()
     {
@@ -64,6 +68,17 @@ public class CharacterStats : MonoBehaviour
 
         if (amount > 0 && !canBeHealed)
             return;
+
+        if (amount < 0 && shieldAmount > 0)
+        {
+            int damage = amount;
+            shieldAmount += damage;
+            
+            if (shieldAmount < 0)
+                shieldAmount = 0;
+            
+            return;
+        }
 
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
         HUDController.hud.UpdateHP();

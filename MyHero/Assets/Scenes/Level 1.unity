@@ -1744,6 +1744,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b04d77bbc986c442b94fb0b8ca548de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &542927550 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: -5750313976676340797, guid: 4239bfdc76e94ea4ea661112e2a7c46a, type: 3}
+  m_PrefabInstance: {fileID: 1281009068170570446}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 542927536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa1b50d05800fe041b57eb9667520b1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShieldAbility
+--- !u!114 &542927551 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3582637620920251487, guid: 4239bfdc76e94ea4ea661112e2a7c46a, type: 3}
+  m_PrefabInstance: {fileID: 1281009068170570446}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 542927536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cea1901abbde9ac4da74dc0f2db39726, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HealAbility
 --- !u!1 &549675142
 GameObject:
   m_ObjectHideFlags: 0
@@ -1812,6 +1834,17 @@ Transform:
   - {fileID: 1104210102}
   m_Father: {fileID: 1275665889}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &668311019 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7005672784104267959, guid: 53c0acd6e2813e542bb5e52773264241, type: 3}
+  m_PrefabInstance: {fileID: 4268468755104299008}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!1 &725257244
 GameObject:
   m_ObjectHideFlags: 0
@@ -3043,6 +3076,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 606583109}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!114 &1411751862 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 51698846958321342, guid: 53c0acd6e2813e542bb5e52773264241, type: 3}
+  m_PrefabInstance: {fileID: 4268468755104299008}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!1 &1484181106
 GameObject:
   m_ObjectHideFlags: 0
@@ -6152,6 +6196,18 @@ PrefabInstance:
       propertyPath: abilityController
       value: 
       objectReference: {fileID: 542927542}
+    - target: {fileID: 1281009068701384828, guid: 4239bfdc76e94ea4ea661112e2a7c46a, type: 3}
+      propertyPath: abilities.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1281009068701384828, guid: 4239bfdc76e94ea4ea661112e2a7c46a, type: 3}
+      propertyPath: 'abilities.Array.data[0]'
+      value: 
+      objectReference: {fileID: 542927551}
+    - target: {fileID: 1281009068701384828, guid: 4239bfdc76e94ea4ea661112e2a7c46a, type: 3}
+      propertyPath: 'abilities.Array.data[1]'
+      value: 
+      objectReference: {fileID: 542927550}
     - target: {fileID: 1281009068701384829, guid: 4239bfdc76e94ea4ea661112e2a7c46a, type: 3}
       propertyPath: maxHealth
       value: 100
@@ -6571,6 +6627,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: HUD
       objectReference: {fileID: 0}
+    - target: {fileID: 7692878099031098326, guid: 53c0acd6e2813e542bb5e52773264241, type: 3}
+      propertyPath: abilityIcon
+      value: 
+      objectReference: {fileID: 668311019}
+    - target: {fileID: 7692878099031098326, guid: 53c0acd6e2813e542bb5e52773264241, type: 3}
+      propertyPath: cooldownOverlay
+      value: 
+      objectReference: {fileID: 1411751862}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6602,7 +6666,7 @@ PrefabInstance:
       objectReference: {fileID: 1235967893}
     - target: {fileID: 5782177474059904308, guid: b48bbd49b7e2f274d95494801c4debc3, type: 3}
       propertyPath: m_VersionIndex
-      value: 28
+      value: 31
       objectReference: {fileID: 0}
     - target: {fileID: 5782177474059904308, guid: b48bbd49b7e2f274d95494801c4debc3, type: 3}
       propertyPath: m_MeshFormatVersion

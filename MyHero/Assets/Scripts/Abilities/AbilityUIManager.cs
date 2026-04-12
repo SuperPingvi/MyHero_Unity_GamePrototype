@@ -9,7 +9,7 @@ public class AbilityUIManager : MonoBehaviour
 
     private CharacterStats caster;
 
-    private void Start()
+    public void Start()
     {
         caster = playerController.GetComponent<CharacterStats>();
 

@@ -18,27 +18,24 @@ public class PlayerController : MonoBehaviour
         return abilities;
     }
     
-    private bool previouslyHadAbility = false;
+    private bool previouslyHadAbility;
     
     private PlayerInputActions inputActions;
-   
 
-    // Start is called before the first frame update
+    void Awake()
+    {
+                motor = GetComponent<PlayerMotor>();
+                abilities = GetComponents<Ability>();
+                Debug.Log($"Found {abilities.Length} abilities on GameObject");
+                inputActions = new PlayerInputActions();
+    }
+    
     void Start()
     {
-        motor = GetComponent<PlayerMotor>();
-        
-        abilities = GetComponents<Ability>();
-        Debug.Log($"Found {abilities.Length} abilities on GameObject");
-        inputActions = new PlayerInputActions();
         inputActions.Enable();
 
-        inputActions.Player.SelectAbility_Q.performed += ctx =>
-        {
-            Debug.Log("Q FIRED");
-            SelectAbility(0);
-        };
-        // inputActions.Player.SelectAbility_W.performed += ctx => SelectAbility(ability_W);
+        inputActions.Player.SelectAbility_Q.performed += ctx => SelectAbility(0);
+        inputActions.Player.SelectAbility_W.performed += ctx => SelectAbility(1);
         // inputActions.Player.SelectAbility_E.performed += ctx => SelectAbility(ability_E);
         // inputActions.Player.SelectAbility_R.performed += ctx => SelectAbility(ability_R);
     }

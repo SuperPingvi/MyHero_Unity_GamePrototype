@@ -198,6 +198,7 @@ GameObject:
   - component: {fileID: 1281009068701384829}
   - component: {fileID: 5616372494207463898}
   - component: {fileID: 3582637620920251487}
+  - component: {fileID: -5750313976676340797}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -329,8 +330,7 @@ MonoBehaviour:
   cam: {fileID: 0}
   canMove: 1
   abilityController: {fileID: 5616372494207463898}
-  abilities:
-  - {fileID: 3582637620920251487}
+  abilities: []
 --- !u!114 &1281009068701384829
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -354,6 +354,7 @@ MonoBehaviour:
   attackDelay: 0.5
   currentMana: 0
   maxMana: 100
+  shieldAmount: 0
 --- !u!114 &5616372494207463898
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -380,6 +381,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HealAbility
   abilityIcon: {fileID: 21300000, guid: 446e11e9aedd8e54fb62a49833110984, type: 3}
+  iconSelected: {fileID: 21300000, guid: be9aa16a746195e48bed62e91f2bdac6, type: 3}
+  iconInactive: {fileID: 21300000, guid: 0d8ee6fde6b5d2b4bb0bf14f87a4f6fd, type: 3}
   abilityName: Heal
   manaCost: 20
   cooldown: 3
@@ -387,3 +390,26 @@ MonoBehaviour:
   targetType: 0
   castType: 0
   healAmount: 50
+--- !u!114 &-5750313976676340797
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1281009068701384830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa1b50d05800fe041b57eb9667520b1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShieldAbility
+  abilityIcon: {fileID: 21300000, guid: cdaf6474e8122aa41a85628cc3047d11, type: 3}
+  iconSelected: {fileID: 21300000, guid: e413f9bf8d5d4fa4db2780949cd18578, type: 3}
+  iconInactive: {fileID: 21300000, guid: e22c33c6b3e18144a964591dca877156, type: 3}
+  abilityName: Shield
+  manaCost: 30
+  cooldown: 5
+  range: 5
+  targetType: 0
+  castType: 0
+  shieldValue: 100
+  duration: 3
