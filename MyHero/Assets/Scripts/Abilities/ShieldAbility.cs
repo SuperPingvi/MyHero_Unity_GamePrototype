@@ -20,6 +20,7 @@ public class ShieldAbility : Ability
     protected override void Apply(AbilityContext context)
     {
         context.target.shieldAmount = shieldValue;
+        context.target.OnShieldStateChanged?.Invoke(true);
 
         // Duration timer
         context.target.StartCoroutine(RemoveShieldAfterTime(context.target));
@@ -30,5 +31,6 @@ public class ShieldAbility : Ability
         yield return new WaitForSeconds(duration);
 
         target.shieldAmount = 0;
+        target.OnShieldStateChanged?.Invoke(false);
     }
 }

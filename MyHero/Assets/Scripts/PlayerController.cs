@@ -44,7 +44,11 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log($"SelectAbility called, index: {index}, abilities count: {abilities?.Length}");
 
-        if (abilities == null || index >= abilities.Length)
+        if (abilities == null || index >= abilities.Length) return;
+        
+        var ability = abilities[index];
+
+        if (ability == null)
         {
             Debug.Log("No ability in slot {index}");
             return;
@@ -138,5 +142,10 @@ public class PlayerController : MonoBehaviour
     public void EnableMovement()
     {
         canMove = true;
+    }
+
+    public void UnlockAbility(int index, Ability ability)
+    {
+        abilities[index] = ability;
     }
 }

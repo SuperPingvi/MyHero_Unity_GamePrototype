@@ -33,6 +33,7 @@ public class CharacterStats : MonoBehaviour
     [Header("Other")]
     public int shieldAmount;
     public bool hasShield => shieldAmount > 0;
+    public System.Action<bool> OnShieldStateChanged;
 
     void Start()
     {
@@ -44,44 +45,38 @@ public class CharacterStats : MonoBehaviour
         if (other.gameObject.CompareTag("Weapon") && other.gameObject.layer != this.gameObject.layer)
         {
             incomingDamage = other.gameObject.GetComponentInParent<CharacterStats>().damage;
-            ReceiveDamage();
-        }
-    }
-        void ReceiveDamage()
-    {
-        if (!isDead)
-        {
-            currentHealth -= incomingDamage;
-            HUDController.hud.UpdateHP();
-            if (currentHealth <= 0)
-            {
-                isDead = true;
-                gameObject.SetActive(false);
-            }
+            ModifyHealth(-incomingDamage);
         }
     }
     
     public void ModifyHealth(int amount)
     {
-        if (amount < 0 && !canBeDamaged)
-            return;
-
-        if (amount > 0 && !canBeHealed)
-            return;
+        if (amount < 0 && !canBeDamaged) return;
+        if (amount > 0 && !canBeHealed) return;
 
         if (amount < 0 && shieldAmount > 0)
         {
-            int damage = amount;
-            shieldAmount += damage;
+            bool hadShield = shieldAmount > 0;
+            shieldAmount += amount;
             
-            if (shieldAmount < 0)
-                shieldAmount = 0;
+            if (shieldAmount < 0) shieldAmount = 0;
             
+            bool hasShieldNow = shieldAmount > 0;
+            if (hadShield != hasShieldNow)
+            {
+                OnShieldStateChanged?.Invoke(hasShieldNow);
+            }
             return;
         }
 
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
         HUDController.hud.UpdateHP();
+
+        if (currentHealth <= 0 && !isDead)
+        {
+            isDead = true;
+            gameObject.SetActive(false);
+        }
     }
 
     public void ModifyMana(int amount)
@@ -90,4 +85,6 @@ public class CharacterStats : MonoBehaviour
         currentMana = Mathf.Clamp(currentMana, 0, maxMana);
         HUDController.hud.UpdateHP();
     }
+    
+    
 }
