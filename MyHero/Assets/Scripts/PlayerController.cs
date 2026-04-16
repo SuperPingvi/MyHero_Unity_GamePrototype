@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Linq;
 
 [RequireComponent(typeof(PlayerMotor))]
 public class PlayerController : MonoBehaviour
@@ -13,10 +14,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private AbilityController abilityController;
     [SerializeField] private Ability[] abilities;
     
-    public Ability[] GetAbilities()
-    {
-        return abilities;
-    }
+    public event System.Action OnAbilitiesChanged;
     
     private bool previouslyHadAbility;
     
@@ -24,33 +22,39 @@ public class PlayerController : MonoBehaviour
 
     void Awake()
     {
-                motor = GetComponent<PlayerMotor>();
-                abilities = GetComponents<Ability>();
-                Debug.Log($"Found {abilities.Length} abilities on GameObject");
-                inputActions = new PlayerInputActions();
+        motor = GetComponent<PlayerMotor>();
+        abilities = GetAbilities();
+        Debug.Log($"Found {abilities.Length} abilities on GameObject");
+        inputActions = new PlayerInputActions();
     }
     
     void Start()
     {
         inputActions.Enable();
-
         inputActions.Player.SelectAbility_Q.performed += ctx => SelectAbility(0);
         inputActions.Player.SelectAbility_W.performed += ctx => SelectAbility(1);
         // inputActions.Player.SelectAbility_E.performed += ctx => SelectAbility(ability_E);
         // inputActions.Player.SelectAbility_R.performed += ctx => SelectAbility(ability_R);
+    }
+    
+    public Ability[] GetAbilities()
+    {
+        return GetComponents<Ability>().Where(a => a.enabled).ToArray();
+    }
+
+    public void RefreshAbilities()
+    {
+        abilities = GetAbilities();
+        OnAbilitiesChanged?.Invoke();
     }
 
     void SelectAbility(int index)
     {
         Debug.Log($"SelectAbility called, index: {index}, abilities count: {abilities?.Length}");
 
-        if (abilities == null || index >= abilities.Length) return;
-        
-        var ability = abilities[index];
-
-        if (ability == null)
+        if (abilities == null || index >= abilities.Length)
         {
-            Debug.Log("No ability in slot {index}");
+            Debug.Log($"No ability in slot {index}");
             return;
         }
         abilityController.SetAbility(abilities[index]);
@@ -142,10 +146,5 @@ public class PlayerController : MonoBehaviour
     public void EnableMovement()
     {
         canMove = true;
-    }
-
-    public void UnlockAbility(int index, Ability ability)
-    {
-        abilities[index] = ability;
     }
 }

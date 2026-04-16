@@ -1,25 +1,20 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class PauseGame : MonoBehaviour
 {
-    public static bool GameIsPaused = false;
+    public static bool GameIsPaused;
     public GameObject pauseMenuUI;
     public GameObject buttonToHide;
     public GameObject deathScreen;
-    bool gameIsOver = false;
-   
-    // Start is called before the first frame update
+    bool gameIsOver;
 
     // Update is called once per frame
     void Update()
     {
         if (!gameIsOver)
         { 
-            if (PartyManager.instance.player.GetComponent<CharacterStats>().isDead == true || PartyManager.instance.hero.GetComponent<CharacterStats>().isDead == true)
+            if (PartyManager.instance.player.GetComponent<CharacterStats>().isDead || PartyManager.instance.hero.GetComponent<CharacterStats>().isDead)
             {
                 DeathGameOver();
             }

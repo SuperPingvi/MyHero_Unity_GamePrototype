@@ -12,16 +12,8 @@ public class AbilityUIManager : MonoBehaviour
     public void Start()
     {
         caster = playerController.GetComponent<CharacterStats>();
-
-        var abilities = playerController.GetAbilities();
-
-        for (int i = 0; i < slots.Length; i++)
-        {
-            if (i < abilities.Length)
-            {
-                slots[i].SetAbility(abilities[i]);
-            }
-        }
+        playerController.OnAbilitiesChanged += Refresh;
+        Refresh();
     }
 
     private void Update()
@@ -31,6 +23,24 @@ public class AbilityUIManager : MonoBehaviour
         foreach (var slot in slots)
         {
             slot.UpdateUI(current, caster);
+        }
+    }
+
+    public void Refresh()
+    {
+        var abilities = playerController.GetAbilities();
+
+        for (int i = 0; i < slots.Length; i++)
+        {
+            if (i < abilities.Length)
+            {
+                slots[i].gameObject.SetActive(true);
+                slots[i].SetAbility(abilities[i]);
+            }
+            else
+            {
+                slots[i].gameObject.SetActive(false);
+            }
         }
     }
 }

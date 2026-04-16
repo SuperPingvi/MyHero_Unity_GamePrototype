@@ -5156,6 +5156,10 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 2052484568}
+    - target: {fileID: 7543337748677678286, guid: ca1b9ae63f98a37498530afcaec84280, type: 3}
+      propertyPath: playerController
+      value: 
+      objectReference: {fileID: 2052484573}
     - target: {fileID: 8577330101226088879, guid: ca1b9ae63f98a37498530afcaec84280, type: 3}
       propertyPath: deathScreen
       value: 
@@ -10126,6 +10130,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1574441210}
     m_Modifications:
+    - target: {fileID: -5750313976676340797, guid: 4239bfdc76e94ea4ea661112e2a7c46a, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1281009068701384826, guid: 4239bfdc76e94ea4ea661112e2a7c46a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 14.4
@@ -10170,6 +10178,14 @@ PrefabInstance:
       propertyPath: cam
       value: 
       objectReference: {fileID: 725257246}
+    - target: {fileID: 1281009068701384828, guid: 4239bfdc76e94ea4ea661112e2a7c46a, type: 3}
+      propertyPath: abilities.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1281009068701384828, guid: 4239bfdc76e94ea4ea661112e2a7c46a, type: 3}
+      propertyPath: 'abilities.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2052484575}
     - target: {fileID: 1281009068701384830, guid: 4239bfdc76e94ea4ea661112e2a7c46a, type: 3}
       propertyPath: m_Name
       value: Player
@@ -10556,6 +10572,52 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
+--- !u!1 &964557259
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 964557261}
+  - component: {fileID: 964557260}
+  m_Layer: 0
+  m_Name: AbilityUnlocker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &964557260
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 964557259}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 467c25bb99c79f542845b4a91b486e52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  abilitiesToUnlock:
+  - Shield
+--- !u!4 &964557261
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 964557259}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 14.5647, y: 0.5, z: 11.66151}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!43 &983627058
 Mesh:
   m_ObjectHideFlags: 0
@@ -19214,6 +19276,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b04d77bbc986c442b94fb0b8ca548de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2052484575 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3582637620920251487, guid: 4239bfdc76e94ea4ea661112e2a7c46a, type: 3}
+  m_PrefabInstance: {fileID: 768336544}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2052484568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cea1901abbde9ac4da74dc0f2db39726, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HealAbility
 --- !u!1001 &2057913519
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21809,3 +21882,4 @@ SceneRoots:
   - {fileID: 1574441210}
   - {fileID: 1736899805}
   - {fileID: 1904271505}
+  - {fileID: 964557261}

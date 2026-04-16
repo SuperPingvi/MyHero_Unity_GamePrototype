@@ -1712,6 +1712,52 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
+--- !u!1 &445013244
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 445013246}
+  - component: {fileID: 445013245}
+  m_Layer: 0
+  m_Name: AbilityUnlocker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &445013245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 445013244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 467c25bb99c79f542845b4a91b486e52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LevelAbilityUnlocker
+  abilitiesToUnlock:
+  - Heal
+--- !u!4 &445013246
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 445013244}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 14.6594, y: 0, z: 12.00569}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &542927536 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1281009068701384830, guid: 4239bfdc76e94ea4ea661112e2a7c46a, type: 3}
@@ -1750,7 +1796,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 1281009068170570446}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 542927536}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aa1b50d05800fe041b57eb9667520b1b, type: 3}
   m_Name: 
@@ -2950,6 +2996,50 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
+--- !u!1 &1253866321
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1253866323}
+  - component: {fileID: 1253866322}
+  m_Layer: 0
+  m_Name: AbilityRegistry
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1253866322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1253866321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b23ca0bd138fdb45885bd844ea96bb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AbilityRegistry
+--- !u!4 &1253866323
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1253866321}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 14.6594, y: 0, z: 12.00569}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1275665888
 GameObject:
   m_ObjectHideFlags: 0
@@ -6178,6 +6268,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 1574441210}
     m_Modifications:
     - target: {fileID: -5750313976676340797, guid: 4239bfdc76e94ea4ea661112e2a7c46a, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -5750313976676340797, guid: 4239bfdc76e94ea4ea661112e2a7c46a, type: 3}
       propertyPath: isUnlocked
       value: 1
       objectReference: {fileID: 0}
@@ -6264,6 +6358,10 @@ PrefabInstance:
     - target: {fileID: 3582637620920251487, guid: 4239bfdc76e94ea4ea661112e2a7c46a, type: 3}
       propertyPath: cooldown
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3582637620920251487, guid: 4239bfdc76e94ea4ea661112e2a7c46a, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3582637620920251487, guid: 4239bfdc76e94ea4ea661112e2a7c46a, type: 3}
       propertyPath: isUnlocked
@@ -7108,3 +7206,5 @@ SceneRoots:
   - {fileID: 1574441210}
   - {fileID: 2890421585682637790}
   - {fileID: 4268468755104299008}
+  - {fileID: 445013246}
+  - {fileID: 1253866323}
