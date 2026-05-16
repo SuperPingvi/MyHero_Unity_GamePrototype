@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 8ef3fd51f27025547af3bda5edfe611e
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - abilityIcon: {instanceID: 0}
+  - iconSelected: {instanceID: 0}
+  - iconInactive: {instanceID: 0}
+  - abilityIndicatorSprite: {fileID: 21300000, guid: b696e033755fc3d49a7ae10c27a33b21, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

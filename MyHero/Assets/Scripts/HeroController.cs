@@ -36,6 +36,7 @@ public class HeroController : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         amoutOfWalkPoints = walkPoints.Length;
         player = PartyManager.instance.player;
+        slashCollider.GetComponent<DamageCollider>().damage = GetComponent<CharacterStats>().damage;
     }
 
     // Update is called once per frame
@@ -118,22 +119,26 @@ public class HeroController : MonoBehaviour
     void Attack()
     {
         FaceTarget();
-        if (targetIsSet)
-        {
-            attackTimer = Time.time + attackCooldown;
-            swordAnimator.SetTrigger("Attack");
-            slashCollider.SetActive(true);
-            DoDelay();
-
-            //Attack animation, sound etc.   
-            targetIsSet = false;
-        }
-        else if (Time.time >= attackTimer)
-        { 
-            target = null;
-            state = State.Advancing;
-        }
+        if (!targetIsSet) return;
+    
+        targetIsSet = false;
+        StartCoroutine(AnimateAttack());
     }
+
+    IEnumerator AnimateAttack()
+    {
+        swordAnimator.SetTrigger("Attack");
+        yield return new WaitForSeconds(0.15f);
+    
+        slashCollider.SetActive(true);
+        yield return new WaitForSeconds(0.2f);
+        slashCollider.SetActive(false);
+    
+        yield return new WaitForSeconds(attackCooldown);
+        target = null;
+        state = State.Advancing;
+    }
+    
     void CheckForTargets()
     {
         Collider[] targets = Physics.OverlapSphere(transform.position, lookRadius, enemy);
@@ -146,15 +151,7 @@ public class HeroController : MonoBehaviour
             state = State.Chasing;
         }
     }
-    IEnumerator Delay()
-    {
-        yield return new WaitForSeconds(0.3f);
-        slashCollider.SetActive(false);
-    }
-    void DoDelay()
-    {
-        StartCoroutine(Delay());
-    }
+    
     void FaceTarget()
     {
         agent.updateRotation = false;

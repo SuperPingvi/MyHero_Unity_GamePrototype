@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
     public event System.Action OnAbilitiesChanged;
     
     private bool previouslyHadAbility;
+    private bool isAbilityAOE;
     
     private PlayerInputActions inputActions;
 
@@ -33,8 +34,8 @@ public class PlayerController : MonoBehaviour
         inputActions.Enable();
         inputActions.Player.SelectAbility_Q.performed += ctx => SelectAbility(0);
         inputActions.Player.SelectAbility_W.performed += ctx => SelectAbility(1);
-        // inputActions.Player.SelectAbility_E.performed += ctx => SelectAbility(ability_E);
-        // inputActions.Player.SelectAbility_R.performed += ctx => SelectAbility(ability_R);
+        inputActions.Player.SelectAbility_E.performed += ctx => SelectAbility(2);
+        // inputActions.Player.SelectAbility_R.performed += ctx => SelectAbility(3);
     }
     
     public Ability[] GetAbilities()
@@ -57,8 +58,19 @@ public class PlayerController : MonoBehaviour
             Debug.Log($"No ability in slot {index}");
             return;
         }
+        
+        if (!abilities[index].CanSelect())
+            return;
+        
         abilityController.SetAbility(abilities[index]);
         Debug.Log($"Ability selected: {abilities[index].abilityName}");
+
+        if (abilities[index].castType == Ability.AbilityCastType.AOE)
+        {
+            isAbilityAOE = true;
+            abilities[index].GetIndicator()?.SetActive(true);
+            Debug.Log("AOE ability selected, indicator should be active");
+        }
     }
 
     // Update is called once per frame
@@ -71,16 +83,33 @@ public class PlayerController : MonoBehaviour
             if (focus != null)
                 motor.SnapFaceTarget();
             RemoveFocus();
+            isAbilityAOE = false;
         }
         
         previouslyHadAbility = hasAbility;
+
+        if (hasAbility)
+        {
+            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, 100, clickMaskLMB))
+            {
+                Vector3 dir = (hit.point - transform.position).normalized;
+                dir.y = 0f;
+                if (dir != Vector3.zero)
+                    transform.rotation = Quaternion.LookRotation(dir);
+
+                if (isAbilityAOE)
+                    abilityController.currentAbility.GetIndicator().transform.position =
+                        new Vector3(hit.point.x, hit.point.y + 2.1f, hit.point.z);
+            }
+        }
         
         if (Input.GetMouseButton(1) && Time.timeScale != 0f && canMove)
         {
-            var ac = GetComponent<AbilityController>();
-            if (ac != null && ac.HasAbility())
+            if (abilityController != null && abilityController.HasAbility())
             {
-                ac.ClearAbility();
+                abilityController.ClearAbility();
                 Debug.Log("Ability cancelled");
             }
             
@@ -103,19 +132,32 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetMouseButton(0) && Time.timeScale != 0f && canMove)
         {
-            var ac = GetComponent<AbilityController>();
-            if (ac == null || !ac.HasAbility())
+            if (abilityController == null || !abilityController.HasAbility())
                 return;
-            
-            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, 100, clickMaskLMB))
+
+            if (isAbilityAOE)
             {
-                Interactable interactable = hit.collider.GetComponent<Interactable>();
-                
-                if (interactable != null)
+                Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+                if (Physics.Raycast(ray, out hit, 100, clickMaskLMB))
                 {
-                    SetFocus(interactable);
+                    abilityController.UseOnPoint(hit.point);
+                    isAbilityAOE = false;
+                }
+            }
+
+            else
+            {
+                Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+                if (Physics.Raycast(ray, out hit, 100, clickMaskLMB))
+                {
+                    Interactable interactable = hit.collider.GetComponent<Interactable>();
+
+                    if (interactable != null)
+                    {
+                        SetFocus(interactable);
+                    }
                 }
             }
         }

@@ -10,12 +10,15 @@ public abstract class Ability : MonoBehaviour
     public int manaCost;
     public float cooldown = 3f;
     public float range = 3f;
+    public float aoeRadius = 4f;
     
     [Header("Targeting")]
     public TargetType targetType;
     public AbilityCastType castType;
+    public virtual GameObject GetIndicator() => null;
     
     protected float lastUseTime;
+    protected CharacterStats defaultCaster;
     
     public enum TargetType
     {
@@ -31,7 +34,17 @@ public abstract class Ability : MonoBehaviour
         Targeted,
         Instant,
         AOE
-    }    
+    }
+
+    protected virtual void Awake()
+    {
+        defaultCaster = GetComponent<CharacterStats>();
+    }
+
+    public bool CanSelect()
+    {
+        return CanUse() && defaultCaster.currentMana >= manaCost;
+    }
 
     public bool CanUse()
     {

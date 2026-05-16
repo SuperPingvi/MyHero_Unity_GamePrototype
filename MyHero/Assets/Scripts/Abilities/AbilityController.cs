@@ -18,6 +18,7 @@ public class AbilityController : MonoBehaviour
 
     public void ClearAbility()
     {
+        currentAbility?.GetIndicator()?.SetActive(false);
         currentAbility = null;
     }
 

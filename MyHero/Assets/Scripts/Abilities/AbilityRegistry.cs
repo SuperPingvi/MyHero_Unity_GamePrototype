@@ -36,6 +36,8 @@ public class AbilityRegistry : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        if (PartyManager.instance == null) return;
+        
         playerController = PartyManager.instance.player.GetComponent<PlayerController>();
         if (playerController == null)
         {
@@ -92,9 +94,9 @@ public class AbilityRegistry : MonoBehaviour
         return null;
     }
 
-    public void ReserAll()
+    public void ResetAll()
     {
         unlockedAbilities.Clear();
-        ApplySavedState();
+        // ApplySavedState();
     }
 }

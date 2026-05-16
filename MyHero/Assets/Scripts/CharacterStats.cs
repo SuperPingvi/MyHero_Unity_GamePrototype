@@ -44,7 +44,7 @@ public class CharacterStats : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Weapon") && other.gameObject.layer != this.gameObject.layer)
         {
-            incomingDamage = other.gameObject.GetComponentInParent<CharacterStats>().damage;
+            incomingDamage = other.gameObject.GetComponent<DamageCollider>().damage;
             ModifyHealth(-incomingDamage);
         }
     }

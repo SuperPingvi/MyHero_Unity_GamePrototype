@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -28,14 +27,21 @@ public class EnemyControllerFSM : MonoBehaviour
     bool hasAttacked;
     float attackTime;
     public float attackInterval = 2f;
-    public float attackRange = 1.5f;
+    public float attackRange = 1.3f;
+    public float attackDelay = 0.5f;
     public GameObject hitCollider;
     public Animator enemyAnimator;
+    public GameObject attackIndicator;
+    public GameObject attackVFX;
 
     //Receive attack or being stunned
     public float stunDuration;
     float stunTimer;
     bool isStunned;
+    
+    //Visual effects
+    EffectVisual effectVisual;
+    public Sprite stunnedSprite;
 
     // Start is called before the first frame update
     void Start()
@@ -44,7 +50,7 @@ public class EnemyControllerFSM : MonoBehaviour
         wanderingArea = transform.position;
         player = PartyManager.instance.player;
         hero = PartyManager.instance.hero;
-
+        effectVisual = GetComponent<EffectVisual>();
     }
 
     // Update is called once per frame
@@ -130,6 +136,13 @@ public class EnemyControllerFSM : MonoBehaviour
             playerIsInSightRange = true;
        
     }
+
+    public void TriggerStun(float duration)
+    {
+        stunDuration = duration;
+        state = State.Stunned;
+    }
+    
     void BeingStunned()
     {
         hasAttacked = false;
@@ -142,12 +155,14 @@ public class EnemyControllerFSM : MonoBehaviour
         {
             stunTimer = Time.time + stunDuration;
             isStunned = true;
+            effectVisual?.ShowEffect(stunnedSprite);
         }
         else if(isStunned && Time.time > stunTimer)
         {
             agent.isStopped = false;
             state = State.Wandering;
             isStunned = false;
+            effectVisual?.ClearEffect();
         }
     }
     /*void WalkAwayAfterAttack()
@@ -159,9 +174,21 @@ public class EnemyControllerFSM : MonoBehaviour
     }*/
     IEnumerator AnimateAttack()
     {
+        // Windup
+        attackIndicator.SetActive(true);
         enemyAnimator.SetTrigger("Attack");
         agent.isStopped = true;
-        yield return new WaitForSeconds(enemyAnimator.GetCurrentAnimatorStateInfo(0).length);
+        yield return new WaitForSeconds(attackDelay);
+    
+        // Hit window
+        attackIndicator.SetActive(false);
+        hitCollider.SetActive(true);
+        yield return new WaitForSeconds(0.2f);
+        hitCollider.SetActive(false);
+    
+        // Wait for rest of animation to finish
+        yield return new WaitForSeconds(enemyAnimator.GetCurrentAnimatorStateInfo(0).length - attackDelay - 0.2f);
+    
         agent.isStopped = false;
     }
     void MoveToNewWalkpoint()

@@ -12,6 +12,7 @@ public class MainMenu : MonoBehaviour
     public Camera mainCamera;
     public void PlayGame ()
     {
+        AbilityRegistry.instance.ResetAll();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
     public void QuitGame()
