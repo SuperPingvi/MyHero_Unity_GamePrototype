@@ -4,6 +4,10 @@ using UnityEngine.AI;
 
 public class HeroController : MonoBehaviour
 {
+    public event System.Action OnStartedAdvancing;
+    public event System.Action OnStartedChasing;
+    public event System.Action OnAttackSwing;
+
     public NavMeshAgent agent;
     public LayerMask enemy, ground;
     public GameObject player;
@@ -53,6 +57,16 @@ public class HeroController : MonoBehaviour
                 break;
         }
     }
+
+    void SetState(State newState)
+    {
+        state = newState;
+        switch (newState)
+        {
+            case State.Advancing: OnStartedAdvancing?.Invoke(); break;
+            case State.Chasing:   OnStartedChasing?.Invoke();   break;
+        }
+    }
     void SetWalkPoint()
     {
         int i = walkPointsReached;
@@ -61,7 +75,7 @@ public class HeroController : MonoBehaviour
     }
     void Advancing()
     {
-        agent.updateRotation = true;
+        if (!agent.updateRotation) agent.updateRotation = true;
         float distanceToDestination = Vector3.Distance(currentWalkPoint, transform.position);
         if(walkPointIsSet && distanceToDestination < 0.5f && walkPointsReached < amoutOfWalkPoints)
         {
@@ -98,7 +112,7 @@ public class HeroController : MonoBehaviour
 
         if (target == null)
         {
-            state = State.Advancing;
+            SetState(State.Advancing);
             return;
         }
 
@@ -111,16 +125,17 @@ public class HeroController : MonoBehaviour
             agent.SetDestination(target.position);
         }
         else
-        { 
-            agent.SetDestination(transform.position);
+        {
+            agent.ResetPath();
             state = State.Attacking;
         }  
     }
     void Attack()
     {
+        if (target == null) { SetState(State.Advancing); return; }
         FaceTarget();
         if (!targetIsSet) return;
-    
+
         targetIsSet = false;
         StartCoroutine(AnimateAttack());
     }
@@ -130,13 +145,14 @@ public class HeroController : MonoBehaviour
         swordAnimator.SetTrigger("Attack");
         yield return new WaitForSeconds(0.15f);
     
+        OnAttackSwing?.Invoke();
         slashCollider.SetActive(true);
         yield return new WaitForSeconds(0.2f);
         slashCollider.SetActive(false);
-    
+
         yield return new WaitForSeconds(attackCooldown);
         target = null;
-        state = State.Advancing;
+        SetState(State.Advancing);
     }
     
     void CheckForTargets()
@@ -148,7 +164,7 @@ public class HeroController : MonoBehaviour
         {
             target = targets[0].gameObject.transform;
             targetIsSet = true;
-            state = State.Chasing;
+            SetState(State.Chasing);
         }
     }
     

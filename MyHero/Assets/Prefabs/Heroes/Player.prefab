@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1281009067892823591
 Transform:
   m_ObjectHideFlags: 0
@@ -48,7 +48,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1281009067892823590}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -116,7 +116,7 @@ Transform:
   m_GameObject: {fileID: 1281009068493253837}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: -0.7071068, w: 0}
-  m_LocalPosition: {x: 0, y: 2, z: -0.44}
+  m_LocalPosition: {x: 0, y: 1, z: -0.44}
   m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -200,6 +200,8 @@ GameObject:
   - component: {fileID: 3582637620920251487}
   - component: {fileID: -5750313976676340797}
   - component: {fileID: 1618032258754660638}
+  - component: {fileID: 6433046028634676499}
+  - component: {fileID: 5822022396844199132}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -216,7 +218,7 @@ Transform:
   m_GameObject: {fileID: 1281009068701384830}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 4.5, y: 1, z: -17.5}
+  m_LocalPosition: {x: 4.5, y: 0, z: -17.5}
   m_LocalScale: {x: 0.75, y: 0.75, z: 0.75}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -287,6 +289,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 6
+  followRangePadding: 0.5
 --- !u!136 &1281009068701384831
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -333,6 +336,10 @@ MonoBehaviour:
   canMove: 1
   abilityController: {fileID: 5616372494207463898}
   abilities: []
+  abilityCursor: {fileID: 2800000, guid: 977c1404ca95aae4faff32a340e929b4, type: 3}
+  characterVisual: {fileID: 5822022396844199132}
+  castFlashSprite: {fileID: 21300000, guid: f4c49f8bdfa73af4a8842c95c6327eac, type: 3}
+  castFlashDuration: 0.2
 --- !u!114 &1281009068701384829
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -416,7 +423,7 @@ MonoBehaviour:
   targetType: 0
   castType: 0
   shieldValue: 100
-  duration: 3
+  duration: 5
 --- !u!114 &1618032258754660638
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -441,6 +448,42 @@ MonoBehaviour:
   castType: 2
   stunDuration: 3
   aoeIndicator: {fileID: 8710644710626018634}
+--- !u!114 &6433046028634676499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1281009068701384830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33cebc58da636124ab1cd767fc4e05de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UnitFX
+  bloodPrefabs:
+  - {fileID: 1025135345547974805, guid: e8766f1c8d8069243aee1cf263542be1, type: 3}
+  - {fileID: 1025135345547974805, guid: 5a24a8dbc1d21df479e5327a11c716cf, type: 3}
+  - {fileID: 1025135345547974805, guid: b58b7598153128146b7121ba835fcc6c, type: 3}
+  - {fileID: 1025135345547974805, guid: 463f32c2ebde4d24499d7e26c5d14484, type: 3}
+  corpsePrefab: {fileID: 6855775655416290396, guid: d30bfee586e9bf44d9386d2b179f94a4, type: 3}
+--- !u!114 &5822022396844199132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1281009068701384830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 210656f6140598c479a9fb32d967b03a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CharacterVisual
+  spriteRenderer: {fileID: 1281009068493253835}
+  baseSprite: {fileID: 21300000, guid: 47432895d3a9cf945b8604d31df36c36, type: 3}
+  advancingSprite: {fileID: 0}
+  chasingSprite: {fileID: 0}
+  attackFlashSprite: {fileID: 0}
+  attackFlashDuration: 0.15
 --- !u!1 &8710644710626018634
 GameObject:
   m_ObjectHideFlags: 0

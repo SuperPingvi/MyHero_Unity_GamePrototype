@@ -13,6 +13,11 @@ public class PlayerController : MonoBehaviour
     
     [SerializeField] private AbilityController abilityController;
     [SerializeField] private Ability[] abilities;
+    [SerializeField] private Texture2D abilityCursor;
+    [SerializeField] private CharacterVisual characterVisual;
+    [SerializeField] private Sprite castFlashSprite;
+    [SerializeField] private float castFlashDuration = 0.2f;
+    private Hero hoveredHero;
     
     public event System.Action OnAbilitiesChanged;
     
@@ -36,6 +41,12 @@ public class PlayerController : MonoBehaviour
         inputActions.Player.SelectAbility_W.performed += ctx => SelectAbility(1);
         inputActions.Player.SelectAbility_E.performed += ctx => SelectAbility(2);
         // inputActions.Player.SelectAbility_R.performed += ctx => SelectAbility(3);
+    }
+
+    void OnDestroy()
+    {
+        inputActions.Disable();
+        inputActions.Dispose();
     }
     
     public Ability[] GetAbilities()
@@ -80,6 +91,10 @@ public class PlayerController : MonoBehaviour
 
         if (previouslyHadAbility && !hasAbility)
         {
+            hoveredHero?.ClearAimIndicator();
+            hoveredHero = null;
+            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+            
             if (focus != null)
                 motor.SnapFaceTarget();
             RemoveFocus();
@@ -102,14 +117,33 @@ public class PlayerController : MonoBehaviour
                 if (isAbilityAOE)
                     abilityController.currentAbility.GetIndicator().transform.position =
                         new Vector3(hit.point.x, hit.point.y + 2.1f, hit.point.z);
+
+                if (!isAbilityAOE)
+                {
+                    Hero hero = hit.collider.GetComponent<Hero>();
+                    if (hero != hoveredHero)
+                    {
+                        hoveredHero?.ClearAimIndicator();
+                        hoveredHero = hero;
+                        hoveredHero?.ShowAimIndicator();
+                    }
+                }
             }
+            else if (hoveredHero != null)
+            {
+                hoveredHero.ClearAimIndicator();
+                hoveredHero = null;
+            }
+            
+            Cursor.SetCursor(abilityCursor, new Vector2(14, 6), CursorMode.Auto); // Yes, hardcoded hotpoint.
         }
-        
+
         if (Input.GetMouseButton(1) && Time.timeScale != 0f && canMove)
         {
             if (abilityController != null && abilityController.HasAbility())
             {
                 abilityController.ClearAbility();
+                isAbilityAOE = false;
                 Debug.Log("Ability cancelled");
             }
             
@@ -135,29 +169,21 @@ public class PlayerController : MonoBehaviour
             if (abilityController == null || !abilityController.HasAbility())
                 return;
 
-            if (isAbilityAOE)
+            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, 100, clickMaskLMB))
             {
-                Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-                if (Physics.Raycast(ray, out hit, 100, clickMaskLMB))
+                if (isAbilityAOE)
                 {
-                    abilityController.UseOnPoint(hit.point);
+                    if (abilityController.UseOnPoint(hit.point))
+                        characterVisual?.PlayOneShot(castFlashSprite, castFlashDuration);
                     isAbilityAOE = false;
                 }
-            }
-
-            else
-            {
-                Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-                if (Physics.Raycast(ray, out hit, 100, clickMaskLMB))
+                else
                 {
                     Interactable interactable = hit.collider.GetComponent<Interactable>();
-
                     if (interactable != null)
-                    {
                         SetFocus(interactable);
-                    }
                 }
             }
         }
@@ -181,6 +207,11 @@ public class PlayerController : MonoBehaviour
         focus = null;
         motor.StopFollowingTarget();
         }
+    public void OnAbilityCastSuccess()
+    {
+        characterVisual?.PlayOneShot(castFlashSprite, castFlashDuration);
+    }
+
     public void StopMovement()
     {
         canMove = false;
@@ -188,5 +219,10 @@ public class PlayerController : MonoBehaviour
     public void EnableMovement()
     {
         canMove = true;
+    }
+    public void DisableInput()
+    {
+        canMove = false;
+        inputActions.Disable();
     }
 }

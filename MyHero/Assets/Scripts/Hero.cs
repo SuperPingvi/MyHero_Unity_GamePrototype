@@ -1,16 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Hero : Interactable
 {
     public CharacterStats selfStats;
     public HeroController heroController;
-    // Start is called before the first frame update
+    
+    [SerializeField] private Sprite aimSprite;
+    private EffectVisual effectVisual;
+    
     void Start()
     {
         if (heroController == null) heroController = GetComponent<HeroController>();
         if (selfStats == null) selfStats = GetComponent<CharacterStats>();
+        if (effectVisual == null) effectVisual = GetComponent<EffectVisual>();
     }
 
     public override void Interact()
@@ -22,9 +24,13 @@ public class Hero : Interactable
         if (ac != null && ac.HasAbility())
         {
             Debug.Log($"Firing ability on {selfStats}");
-
             var targetStats = GetComponent<CharacterStats>();
-            ac.UseOnTarget(targetStats);
+            if (ac.UseOnTarget(targetStats))
+                player?.GetComponent<PlayerController>()?.OnAbilityCastSuccess();
         }
     }
+    
+    public void ShowAimIndicator() => effectVisual?.ShowEffect(aimSprite);
+    
+    public void ClearAimIndicator() => effectVisual?.ClearEffect();
 }

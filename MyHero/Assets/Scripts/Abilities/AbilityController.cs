@@ -22,32 +22,30 @@ public class AbilityController : MonoBehaviour
         currentAbility = null;
     }
 
-    public void UseOnTarget(CharacterStats target)
+    public bool UseOnTarget(CharacterStats target)
     {
-        if (currentAbility == null) return;
+        if (currentAbility == null) return false;
 
         AbilityContext context = new AbilityContext(caster, target);
-
         bool success = currentAbility.TryUse(context);
 
         if (success)
-        {
             ClearAbility();
-        }
+
+        return success;
     }
 
-    public void UseOnPoint(Vector3 point)
+    public bool UseOnPoint(Vector3 point)
     {
-        if (currentAbility == null) return;
+        if (currentAbility == null) return false;
 
         AbilityContext context = new AbilityContext(caster, null, point);
-
         bool success = currentAbility.TryUse(context);
 
         if (success)
-        {
             ClearAbility();
-        }
+
+        return success;
     }
 
     public bool HasAbility()

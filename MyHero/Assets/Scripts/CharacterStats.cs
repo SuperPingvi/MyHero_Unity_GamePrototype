@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -34,19 +33,30 @@ public class CharacterStats : MonoBehaviour
     public int shieldAmount;
     public bool hasShield => shieldAmount > 0;
     public System.Action<bool> OnShieldStateChanged;
+    public System.Action OnDamaged;
+    public System.Action OnDeath;
 
     void Start()
     {
         currentMana = maxMana;
     }
+    
+    private HashSet<Collider> activeHitColliders = new HashSet<Collider>();
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Weapon") && other.gameObject.layer != this.gameObject.layer)
+        if (other.gameObject.CompareTag("Weapon") && other.gameObject.layer != gameObject.layer)
         {
+            if (!activeHitColliders.Add(other)) return;
+
             incomingDamage = other.gameObject.GetComponent<DamageCollider>().damage;
             ModifyHealth(-incomingDamage);
         }
+    }
+    
+    private void OnTriggerExit(Collider other)
+    {
+        activeHitColliders.Remove(other);
     }
     
     public void ModifyHealth(int amount)
@@ -70,11 +80,14 @@ public class CharacterStats : MonoBehaviour
         }
 
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
+        if (amount < 0)
+            OnDamaged?.Invoke();
         HUDController.hud.UpdateHP();
 
         if (currentHealth <= 0 && !isDead)
         {
             isDead = true;
+            OnDeath?.Invoke();
             gameObject.SetActive(false);
         }
     }

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5434292974068358950}
   - component: {fileID: 4870288102019647550}
   - component: {fileID: 731546792380022883}
+  - component: {fileID: 1081793061890580776}
   m_Layer: 5
   m_Name: AttackIndicator
   m_TagString: Untagged
@@ -75,6 +76,19 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1081793061890580776
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1316383062525606782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 583a8b484d005af46a755552581d3e3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AttackIndicator
+  fillImage: {fileID: 0}
 --- !u!1 &1787172580562870836
 GameObject:
   m_ObjectHideFlags: 0
@@ -414,6 +428,7 @@ GameObject:
   - component: {fileID: -7062184229658580751}
   - component: {fileID: -6977833012314395321}
   - component: {fileID: 9077080775276109062}
+  - component: {fileID: 9033966545819104503}
   m_Layer: 9
   m_Name: FastEnemy
   m_TagString: Untagged
@@ -639,14 +654,32 @@ MonoBehaviour:
   attackInterval: 3
   attackRange: 1.2
   telegraphDuration: 0
+  aimToLockRatio: 0.4
   rotationSpeed: 8
-  attackIndicator: {fileID: 1316383062525606782}
+  attackIndicator: {fileID: 0}
   mortarPrefab: {fileID: 0}
   hitCollider: {fileID: 2363251882246084899}
   hitWindow: 0.2
   stunDuration: 0
   stunnedSprite: {fileID: 21300000, guid: 861a6dc7a818eb54190215694dbf7669, type: 3}
   attackVFX: {fileID: 7468153944099813054}
+--- !u!114 &9033966545819104503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6956259371732605765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33cebc58da636124ab1cd767fc4e05de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UnitFX
+  bloodPrefabs:
+  - {fileID: 1025135345547974805, guid: 4b9e3538b4c25214cb98ba0784d9621f, type: 3}
+  - {fileID: 1025135345547974805, guid: c02375550b2f24041947b8850dcbc9cf, type: 3}
+  - {fileID: 1025135345547974805, guid: 0b92a0012afdf8745b42494660dd0b17, type: 3}
+  - {fileID: 1025135345547974805, guid: ca030cd581235084b92e89e7102b936b, type: 3}
 --- !u!1 &7468153944099813054
 GameObject:
   m_ObjectHideFlags: 0

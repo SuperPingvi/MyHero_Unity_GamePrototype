@@ -25,17 +25,22 @@ public class EnemyController_New : MonoBehaviour
     bool targetIsSet;
     public GameObject player, hero;
     bool playerIsInSightRange, heroIsInSightRange;
+    public float targetCommitDuration = 2f;
+    float targetCommitTimer;
 
     // Attacking
+    private Coroutine attackCoroutine;
     bool hasAttacked;
     float attackTime;
     public float attackInterval = 3f;
     public float attackRange = 8f;
     public float telegraphDuration = 1.2f; // How long the indicator shows before firing
+    [Range(0f, 1f)]
+    public float aimToLockRatio = 0.4f; // 0 = all aim, 1 = all lock
     public float rotationSpeed = 8f;
     
     [Header ("Detached Indicator")] // Ground circle shown during telegraph
-    public GameObject attackIndicator;
+    public AttackIndicator attackIndicator;
     
     [Header("Detached")]
     public GameObject mortarPrefab;
@@ -92,6 +97,7 @@ public class EnemyController_New : MonoBehaviour
         {
             target = player.transform;
             targetIsSet = true;
+            targetCommitTimer = 0f;
             walkPointIsSet = false;
             state = State.Chasing;
             playerIsInSightRange = false;
@@ -100,6 +106,7 @@ public class EnemyController_New : MonoBehaviour
         {
             target = hero.transform;
             targetIsSet = true;
+            targetCommitTimer = 0f;
             walkPointIsSet = false;
             state = State.Chasing;
             heroIsInSightRange = false;
@@ -110,10 +117,40 @@ public class EnemyController_New : MonoBehaviour
 
     void Chasing()
     {
+        if (target == null) { state = State.Wandering; return; }
+
         agent.destination = target.position;
         float targetDistance = Vector3.Distance(target.position, transform.position);
+
         if (targetDistance < attackRange)
+        {
             state = State.Attacking;
+            return;
+        }
+
+        targetCommitTimer += Time.deltaTime;
+        if (targetCommitTimer < targetCommitDuration)
+            return;
+
+        // Commitment window expired — re-evaluate
+        if (targetDistance > lookRadius)
+        {
+            target = null;
+            targetIsSet = false;
+            targetCommitTimer = 0f;
+            walkPointIsSet = false;
+            state = State.Wandering;
+            return;
+        }
+
+        // Check if the other unit is closer and within range
+        GameObject other = (target.gameObject == player) ? hero : player;
+        float otherDistance = Vector3.Distance(other.transform.position, transform.position);
+        if (otherDistance < targetDistance && otherDistance < lookRadius)
+        {
+            target = other.transform;
+            targetCommitTimer = 0f;
+        }
     }
 
     void Attacking()
@@ -122,7 +159,7 @@ public class EnemyController_New : MonoBehaviour
         {
             attackTime = Time.time + attackInterval;
             hasAttacked = true;
-            StartCoroutine(AnimateAttack());
+            attackCoroutine = StartCoroutine(AnimateAttack());
             // target stays alive during coroutine, nulled inside it after aim phase
         }
 
@@ -130,7 +167,7 @@ public class EnemyController_New : MonoBehaviour
 
         if (hasAttacked && Time.time > attackTime)
         {
-            agent.destination = transform.position;
+            agent.ResetPath();
             walkPointIsSet = false;
             state = State.Wandering;
             hasAttacked = false;
@@ -174,16 +211,17 @@ public class EnemyController_New : MonoBehaviour
     {
         agent.isStopped = true;
         
-        attackIndicator.SetActive(true);
+        attackIndicator?.Show(telegraphDuration);
 
         // Phase 1 — Aim (target still alive, track real position)
         float elapsed = 0f;
-        float aimDuration = telegraphDuration * 0.4f;
+        float aimDuration = telegraphDuration * (1f - aimToLockRatio);
 
         while (elapsed < aimDuration)
         {
+            if (target == null) break;
             Vector3 livePos = target.position;
-            
+
             if (attackType == AttackType.Detached)
                 attackIndicator.transform.position = new Vector3(livePos.x, 1.5f, livePos.z);
 
@@ -199,15 +237,21 @@ public class EnemyController_New : MonoBehaviour
         }
 
         // Lock — snapshot and null target
+        if (target == null)
+        {
+            agent.isStopped = false;
+            attackIndicator?.Hide();
+            yield break;
+        }
         Vector3 targetPoint = new Vector3(target.position.x, 0.5f, target.position.z);
         targetIsSet = false;
         target = null;
 
         // Phase 2 — Lock
-        yield return new WaitForSeconds(telegraphDuration * 0.6f);
+        yield return new WaitForSeconds(telegraphDuration * aimToLockRatio);
 
         // Phase 3 — Fire
-        attackIndicator.SetActive(false);
+        attackIndicator?.Hide();
 
         if (attackType == AttackType.Detached)
         {
@@ -248,6 +292,17 @@ public class EnemyController_New : MonoBehaviour
     
     public void TriggerStun(float duration)
     {
+        if (attackCoroutine != null)
+        {
+            StopCoroutine(attackCoroutine);
+            attackCoroutine = null;
+            attackIndicator?.Hide();
+            hitCollider?.SetActive(false);
+            attackVFX?.SetActive(false);
+            hasAttacked = false;
+            agent.isStopped = false;
+        }
+
         stunDuration = duration;
         state = State.Stunned;
     }

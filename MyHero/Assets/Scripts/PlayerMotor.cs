@@ -7,9 +7,12 @@ using UnityEngine.AI;
 public class PlayerMotor : MonoBehaviour
 {
     Transform target;
-    
+    NavMeshAgent targetAgent;
+    bool inFollowRange;
+
     NavMeshAgent agent;
     public float speed = 6;
+    [SerializeField] float followRangePadding = 0.5f;
 
     // Start is called before the first frame update
     void Start()
@@ -19,35 +22,39 @@ public class PlayerMotor : MonoBehaviour
     }
     public void MoveToPoint(Vector3 point)
     {
-        agent.SetDestination(point);
+        bool success = agent.SetDestination(point);
+        if (!success)
+            Debug.LogWarning($"SetDestination failed for point {point}");
     }
     // Update is called once per frame
     void Update()
     {
         if (target != null)
         {
-            agent.SetDestination(target.position);
+            if ((target.position - agent.destination).sqrMagnitude > 0.01f)
+                agent.SetDestination(target.position);
+            SynchronizeSpeed();
             FaceTarget();
         }
-        
     }
     public void FollowTarget(Interactable newTarget)
     {
         agent.stoppingDistance = newTarget.radius * .8f;
-        
-        // agent.updateRotation = false;
-        
+        agent.updateRotation = false;
         target = newTarget.interactionSpace;
+        targetAgent = newTarget.GetComponent<NavMeshAgent>();
     }
     public void StopFollowingTarget()
     {
         agent.stoppingDistance = 0f;
         agent.updateRotation = true;
-        
+        agent.speed = speed;
+        targetAgent = null;
+        inFollowRange = false;
         target = null;
         agent.ResetPath();
     }
-    public void FaceTarget()
+    void FaceTarget()
     {
         Vector3 direction = (target.position - transform.position).normalized;
         Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0f, direction.z));
@@ -56,14 +63,20 @@ public class PlayerMotor : MonoBehaviour
 
     public void SnapFaceTarget()
     {
+        if (target == null) return;
         Vector3 direction = (target.position - transform.position).normalized;
         transform.rotation = Quaternion.LookRotation(new Vector3(direction.x, 0f, direction.z));
     }
-    public void SynchronizeSpeed()
+    void SynchronizeSpeed()
     {
-        //if target moves, set speed equals to target's speed, to follow smoothly
-        //get target's speed
-        //set our speed
-        //reset speed upon clearing target
+        if (targetAgent == null) return;
+        float dist = Vector3.Distance(transform.position, target.position);
+
+        if (!inFollowRange && dist <= agent.stoppingDistance)
+            inFollowRange = true;
+        else if (inFollowRange && dist > agent.stoppingDistance + followRangePadding)
+            inFollowRange = false;
+
+        agent.speed = inFollowRange ? targetAgent.velocity.magnitude : speed;
     }
 }
