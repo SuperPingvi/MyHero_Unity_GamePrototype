@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CharacterStats : MonoBehaviour
@@ -23,7 +22,6 @@ public class CharacterStats : MonoBehaviour
     public int damage = 50;
     public float attackSpeed = 1f;
     public float attackDelay = 0.5f;
-    int incomingDamage;
     
     [Header("Mana")]
     public int currentMana;
@@ -40,25 +38,7 @@ public class CharacterStats : MonoBehaviour
     {
         currentMana = maxMana;
     }
-    
-    private HashSet<Collider> activeHitColliders = new HashSet<Collider>();
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("Weapon") && other.gameObject.layer != gameObject.layer)
-        {
-            if (!activeHitColliders.Add(other)) return;
-
-            incomingDamage = other.gameObject.GetComponent<DamageCollider>().damage;
-            ModifyHealth(-incomingDamage);
-        }
-    }
-    
-    private void OnTriggerExit(Collider other)
-    {
-        activeHitColliders.Remove(other);
-    }
-    
     public void ModifyHealth(int amount)
     {
         if (amount < 0 && !canBeDamaged) return;

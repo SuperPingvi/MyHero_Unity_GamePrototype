@@ -5,14 +5,13 @@ using UnityEngine;
 public class Enemy : Interactable
 {
     public CharacterStats selfStats;
-    public EnemyControllerFSM enemyController;
-    // Start is called before the first frame update
+    public EnemyController_New enemyController;
     void Start()
     {
         if (selfStats == null)
             selfStats = gameObject.GetComponent<CharacterStats>();
         if (enemyController == null)
-            enemyController = gameObject.GetComponent<EnemyControllerFSM>();
+            enemyController = gameObject.GetComponent<EnemyController_New>();
     }
     public override void Interact()
     {
@@ -22,6 +21,6 @@ public class Enemy : Interactable
     void Attack()
     {
         Debug.Log("Attacking" + transform.name);
-        enemyController.state = EnemyControllerFSM.State.Stunned;
+        enemyController.TriggerStun(enemyController.stunDuration);
     }
 }

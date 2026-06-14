@@ -1211,11 +1211,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6279253316027222669, guid: d0247fbb01144cb479f7ee77c5fbc10b, type: 3}
       propertyPath: 'abilitiesToUnlock.Array.data[1]'
-      value: Shield
+      value: Dazzle
       objectReference: {fileID: 0}
     - target: {fileID: 6279253316027222669, guid: d0247fbb01144cb479f7ee77c5fbc10b, type: 3}
       propertyPath: 'abilitiesToUnlock.Array.data[2]'
-      value: Dazzle
+      value: Shield
       objectReference: {fileID: 0}
     - target: {fileID: 8328395831609073723, guid: d0247fbb01144cb479f7ee77c5fbc10b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3784,7 +3784,7 @@ Transform:
   m_GameObject: {fileID: 736700725}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.25, z: 0}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

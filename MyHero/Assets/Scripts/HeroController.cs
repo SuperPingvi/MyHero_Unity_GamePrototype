@@ -20,21 +20,24 @@ public class HeroController : MonoBehaviour
     public Vector3 currentWalkPoint;
     int walkPointsReached;
     int amoutOfWalkPoints;
-    [SerializeField]bool walkPointIsSet;
+    [SerializeField] bool walkPointIsSet;
     public GameObject[] walkPoints;
 
     //Enemy chase and attack
     public float lookRadius = 10f;
     public float attackRadius = 1.5f;
     public float attackCooldown = 1f;
-    float attackTimer;
     public GameObject slashCollider;
     public Animator swordAnimator;
+    [SerializeField] float minApproachTime = 1.5f;
+    [SerializeField] float dashDistance = 2f;
+    [SerializeField] float dashDuration = 0.12f;
     Transform target;
-    [SerializeField]bool targetIsSet;
-    
- 
-    // Start is called before the first frame update
+    bool isAttacking;
+    bool shouldDash;
+    float lastAttackTime;
+    float approachTimer;
+
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -43,13 +46,15 @@ public class HeroController : MonoBehaviour
         slashCollider.GetComponent<DamageCollider>().damage = GetComponent<CharacterStats>().damage;
     }
 
-    // Update is called once per frame
     void Update()
     {
+        DecideState();
+        if (state == State.Chasing || state == State.Advancing)
+            approachTimer += Time.deltaTime;
         switch (state)
         {
             default:
-                case State.Advancing: CheckForTargets(); Advancing();
+                case State.Advancing: Advancing();
                     break;
             case State.Chasing: ChaseEnemy();
                 break;
@@ -58,26 +63,69 @@ public class HeroController : MonoBehaviour
         }
     }
 
+    // Single decision step: the only place that reads/writes target and picks state.
+    // Skipped while a swing coroutine is in flight so Hero isn't yanked mid-attack.
+    void DecideState()
+    {
+        if (isAttacking) return;
+
+        // Attack tier: keep current target if still alive and in range, else find closest.
+        // Cooldown check here only — chasing and advancing are freely available once isAttacking clears.
+        Transform attackTarget = IsValidInRadius(target, attackRadius) ? target : GetClosest(attackRadius);
+        if (attackTarget != null && Time.time >= lastAttackTime + attackCooldown)
+        {
+            target = attackTarget;
+            if (state != State.Attacking) SetState(State.Attacking);
+            return;
+        }
+
+        // Chase tier: same stickiness within lookRadius.
+        Transform chaseTarget = IsValidInRadius(target, lookRadius) ? target : GetClosest(lookRadius);
+        if (chaseTarget != null)
+        {
+            target = chaseTarget;
+            if (state != State.Chasing) SetState(State.Chasing);
+            return;
+        }
+
+        // No target in any tier.
+        target = null;
+        if (state != State.Advancing) SetState(State.Advancing);
+    }
+
     void SetState(State newState)
     {
         state = newState;
         switch (newState)
         {
-            case State.Advancing: OnStartedAdvancing?.Invoke(); break;
-            case State.Chasing:   OnStartedChasing?.Invoke();   break;
+            case State.Advancing:
+                walkPointIsSet = false;     // re-issue destination on next Advancing() tick
+                agent.updateRotation = true;
+                OnStartedAdvancing?.Invoke();
+                break;
+            case State.Chasing:
+                agent.updateRotation = true;
+                OnStartedChasing?.Invoke();
+                break;
+            case State.Attacking:
+                shouldDash = approachTimer >= minApproachTime;
+                approachTimer = 0f;
+                break;
         }
     }
+
     void SetWalkPoint()
     {
         int i = walkPointsReached;
         if (i < amoutOfWalkPoints)
             currentWalkPoint = walkPoints[i].transform.position;
     }
+
     void Advancing()
     {
         if (!agent.updateRotation) agent.updateRotation = true;
         float distanceToDestination = Vector3.Distance(currentWalkPoint, transform.position);
-        if(walkPointIsSet && distanceToDestination < 0.5f && walkPointsReached < amoutOfWalkPoints)
+        if (walkPointIsSet && distanceToDestination < 0.5f && walkPointsReached < amoutOfWalkPoints)
         {
             walkPointsReached++;
             walkPointIsSet = false;
@@ -88,86 +136,59 @@ public class HeroController : MonoBehaviour
             agent.SetDestination(currentWalkPoint);
             walkPointIsSet = true;
         }
-        //Stop HERO when Player is far away.
-        /*float distanceToPlayer = Vector3.Distance(player.transform.position, transform.position);
-        if(distanceToPlayer > lookRadius)
-        {
-            agent.isStopped = true;
-        }
-        else
-        {
-            agent.isStopped = false;
-        }*/
     }
+
     void ChaseEnemy()
     {
-        Transform closeTarget = GetClosestTargetInAttackRange();
-
-        if (closeTarget != null /* && closeTarget != target */)
-        {
-            target = closeTarget;
-            state = State.Attacking; // State.Chasing; To stop Attacking on the go.
-            return;
-        }
-
-        if (target == null)
-        {
-            SetState(State.Advancing);
-            return;
-        }
-
-        if (walkPointIsSet) walkPointIsSet = false;
-
-        float targetDistance = Vector3.Distance(target.position, transform.position);
-
-        if (targetDistance > attackRadius)
-        { 
-            agent.SetDestination(target.position);
-        }
-        else
-        {
-            agent.ResetPath();
-            state = State.Attacking;
-        }  
+        agent.SetDestination(target.position);
     }
+
     void Attack()
     {
-        if (target == null) { SetState(State.Advancing); return; }
+        agent.ResetPath();
         FaceTarget();
-        if (!targetIsSet) return;
-
-        targetIsSet = false;
-        StartCoroutine(AnimateAttack());
+        if (!isAttacking)
+        {
+            isAttacking = true;
+            StartCoroutine(AnimateAttack(shouldDash));
+        }
     }
 
-    IEnumerator AnimateAttack()
+    IEnumerator AnimateAttack(bool dash)
     {
         swordAnimator.SetTrigger("Attack");
         yield return new WaitForSeconds(0.15f);
-    
+
+        if (dash) StartCoroutine(DashCoroutine(transform.forward));
+        lastAttackTime = Time.time;
         OnAttackSwing?.Invoke();
         slashCollider.SetActive(true);
         yield return new WaitForSeconds(0.2f);
         slashCollider.SetActive(false);
 
-        yield return new WaitForSeconds(attackCooldown);
         target = null;
-        SetState(State.Advancing);
+        isAttacking = false;  // swing is visually done; DecideState unblocked
+
+        yield return new WaitForSeconds(attackCooldown);  // cooldown runs in background
     }
-    
-    void CheckForTargets()
+
+    IEnumerator DashCoroutine(Vector3 direction)
     {
-        Collider[] targets = Physics.OverlapSphere(transform.position, lookRadius, enemy);
-        int targetsInSight = targets.Length;
-        
-        if(targetsInSight > 0 && !targetIsSet)
+        agent.updatePosition = false;
+        Vector3 start = transform.position;
+        Vector3 end = start + direction * dashDistance;
+        float elapsed = 0f;
+        while (elapsed < dashDuration)
         {
-            target = targets[0].gameObject.transform;
-            targetIsSet = true;
-            SetState(State.Chasing);
+            elapsed += Time.deltaTime;
+            transform.position = Vector3.Lerp(start, end, elapsed / dashDuration);
+            yield return null;
         }
+        transform.position = end;
+        agent.Warp(end);
+        agent.updatePosition = true;
     }
-    
+
     void FaceTarget()
     {
         agent.updateRotation = false;
@@ -175,26 +196,22 @@ public class HeroController : MonoBehaviour
         Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0f, direction.z));
         transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 8f);
     }
-    
-    // New "hit what's in your face" check
-    Transform GetClosestTargetInAttackRange()
+
+    bool IsValidInRadius(Transform t, float radius)
     {
-        Collider[] hits = Physics.OverlapSphere(transform.position, attackRadius, enemy);
+        return t != null && Vector3.Distance(t.position, transform.position) <= radius;
+    }
 
-        float closestDistance = Mathf.Infinity;
-        Transform bestTarget = null;
-
+    Transform GetClosest(float radius)
+    {
+        Collider[] hits = Physics.OverlapSphere(transform.position, radius, enemy);
+        float closest = Mathf.Infinity;
+        Transform best = null;
         foreach (var hit in hits)
         {
             float dist = Vector3.Distance(transform.position, hit.transform.position);
-
-            if (dist < closestDistance)
-            {
-                closestDistance = dist;
-                bestTarget = hit.transform;
-            }
+            if (dist < closest) { closest = dist; best = hit.transform; }
         }
-
-        return bestTarget;
+        return best;
     }
 }

@@ -224,5 +224,6 @@ public class PlayerController : MonoBehaviour
     {
         canMove = false;
         inputActions.Disable();
+        abilityController.ClearAbility();
     }
 }
